@@ -13,13 +13,14 @@ namespace Jennings_Tyler_GOL
     public partial class Form1 : Form
     {
         // The universe array
-        bool[,] universe = new bool[40, 5];
-        bool[,] scratchPad = new bool[5, 5];
+        // int length;
+        // int width;
+        bool[,] universe = new bool[40, 40];
+        bool[,] scratchPad = new bool[40, 40];
 
         // Drawing colors
         Color gridColor = Color.Black;
         Color cellColor = Color.Green;
-
         // The Timer class
         Timer timer = new Timer();
 
@@ -205,6 +206,45 @@ namespace Jennings_Tyler_GOL
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             timer.Enabled = true;
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Iterate through the universe in the y, top to bottom
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                // Iterate through the universe in the x, left to right
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    universe[x, y] = false;
+                }
+            }
+            graphicsPanel1.Invalidate();
+        }
+
+        private void newToolStripButton_Click(object sender, EventArgs e)
+        {
+            // Iterate through the universe in the y, top to bottom
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                // Iterate through the universe in the x, left to right
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    universe[x, y] = false;
+                }
+            }
+            graphicsPanel1.Invalidate();
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            timer.Enabled = false;
+        }
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            NextGeneration();
+            graphicsPanel1.Invalidate();
         }
     }
 }
