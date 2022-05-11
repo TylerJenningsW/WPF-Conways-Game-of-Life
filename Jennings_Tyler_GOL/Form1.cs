@@ -127,10 +127,25 @@ namespace Jennings_Tyler_GOL
                     #endregion
 
                     // Fill the cell with a brush if alive
-                    if (universe[x, y] == true)
+                    if (universe[x, y] == true && neighbors == 1 || neighbors > 3)
                     {
                         // alive
                         e.Graphics.FillRectangle(cellBrush, cellRect);
+                        e.Graphics.DrawString(neighbors.ToString(), font, cellBrushDead, cellRect, drawFormat);
+                    }
+                    else if (universe[x, y] == true && neighbors <= 3 && neighbors != 0)
+                    {
+                        // alive
+                        e.Graphics.FillRectangle(cellBrush, cellRect);
+                        e.Graphics.DrawString(neighbors.ToString(), font, cellBrushAlive, cellRect, drawFormat);
+                    }
+                    else if (universe[x, y] == true)
+                    {
+                        // alive
+                        e.Graphics.FillRectangle(cellBrush, cellRect);
+                    }
+                    else if (neighbors == 3)
+                    {
                         e.Graphics.DrawString(neighbors.ToString(), font, cellBrushAlive, cellRect, drawFormat);
                     }
                     else if (universe[x, y] == false && neighbors != 0)
