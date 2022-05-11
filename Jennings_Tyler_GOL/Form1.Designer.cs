@@ -56,9 +56,6 @@ namespace Jennings_Tyler_GOL
             this.openToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.cutToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.copyToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.pasteToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.Run = new System.Windows.Forms.ToolStripButton();
             this.Stop = new System.Windows.Forms.ToolStripButton();
@@ -239,9 +236,6 @@ namespace Jennings_Tyler_GOL
             this.openToolStripButton,
             this.saveToolStripButton,
             this.toolStripSeparator6,
-            this.cutToolStripButton,
-            this.copyToolStripButton,
-            this.pasteToolStripButton,
             this.toolStripSeparator7,
             this.Run,
             this.Stop,
@@ -285,33 +279,6 @@ namespace Jennings_Tyler_GOL
             this.toolStripSeparator6.Name = "toolStripSeparator6";
             this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
             // 
-            // cutToolStripButton
-            // 
-            this.cutToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.cutToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("cutToolStripButton.Image")));
-            this.cutToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cutToolStripButton.Name = "cutToolStripButton";
-            this.cutToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.cutToolStripButton.Text = "C&ut";
-            // 
-            // copyToolStripButton
-            // 
-            this.copyToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.copyToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("copyToolStripButton.Image")));
-            this.copyToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.copyToolStripButton.Name = "copyToolStripButton";
-            this.copyToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.copyToolStripButton.Text = "&Copy";
-            // 
-            // pasteToolStripButton
-            // 
-            this.pasteToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.pasteToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("pasteToolStripButton.Image")));
-            this.pasteToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.pasteToolStripButton.Name = "pasteToolStripButton";
-            this.pasteToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.pasteToolStripButton.Text = "&Paste";
-            // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
@@ -325,7 +292,7 @@ namespace Jennings_Tyler_GOL
             this.Run.Name = "Run";
             this.Run.Size = new System.Drawing.Size(23, 22);
             this.Run.Text = "Run";
-            this.Run.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.Run.Click += new System.EventHandler(this.Run_Click);
             // 
             // Stop
             // 
@@ -335,7 +302,7 @@ namespace Jennings_Tyler_GOL
             this.Stop.Name = "Stop";
             this.Stop.Size = new System.Drawing.Size(23, 22);
             this.Stop.Text = "Stop";
-            this.Stop.Click += new System.EventHandler(this.toolStripButton2_Click);
+            this.Stop.Click += new System.EventHandler(this.Stop_Click);
             // 
             // Next
             // 
@@ -346,7 +313,7 @@ namespace Jennings_Tyler_GOL
             this.Next.Size = new System.Drawing.Size(23, 22);
             this.Next.Text = "Next";
             this.Next.ToolTipText = "Next";
-            this.Next.Click += new System.EventHandler(this.toolStripButton3_Click);
+            this.Next.Click += new System.EventHandler(this.Next_Click);
             // 
             // statusStrip1
             // 
@@ -386,7 +353,7 @@ namespace Jennings_Tyler_GOL
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Game of Life";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
@@ -426,9 +393,6 @@ namespace Jennings_Tyler_GOL
         private System.Windows.Forms.ToolStripButton openToolStripButton;
         private System.Windows.Forms.ToolStripButton saveToolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-        private System.Windows.Forms.ToolStripButton cutToolStripButton;
-        private System.Windows.Forms.ToolStripButton copyToolStripButton;
-        private System.Windows.Forms.ToolStripButton pasteToolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelGenerations;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem1;

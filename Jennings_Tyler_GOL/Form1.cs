@@ -13,14 +13,16 @@ namespace Jennings_Tyler_GOL
     public partial class Form1 : Form
     {
         // The universe array
-        // int length;
-        // int width;
         bool[,] universe = new bool[40, 40];
+        // Second universe array to copy from
         bool[,] scratchPad = new bool[40, 40];
 
         // Drawing colors
         Color gridColor = Color.Black;
-        Color cellColor = Color.Green;
+        Color cellColor = Color.Gray;
+        Color cellAlive = Color.Green;
+        Color cellDead = Color.Red;
+
         // The Timer class
         Timer timer = new Timer();
 
@@ -46,6 +48,7 @@ namespace Jennings_Tyler_GOL
                 // Iterate through the universe in the x, left to right
                 for (int x = 0; x < universe.GetLength(0); x++)
                 {
+                    // Implement the game logic
                     int count = CountNeighborsFinite(x, y);
                     if (count < 2)
                     {
@@ -96,6 +99,10 @@ namespace Jennings_Tyler_GOL
 
             // A Brush for filling living cells interiors (color)
             Brush cellBrush = new SolidBrush(cellColor);
+            Brush cellBrushAlive = new SolidBrush(cellAlive);
+
+            // A Brush for filling dead cells interiors (color)
+            Brush cellBrushDead = new SolidBrush(cellDead);
 
             // Iterate through the universe in the y, top to bottom
             for (int y = 0; y < universe.GetLength(1); y++)
@@ -110,10 +117,26 @@ namespace Jennings_Tyler_GOL
                     cellRect.Width = cellWidth;
                     cellRect.Height = cellHeight;
 
+                    // font for displaying neighbor count
+                    #region font
+                    Font font = new Font("Arial", 24, FontStyle.Bold, GraphicsUnit.Point);
+                    StringFormat drawFormat = new StringFormat();
+                    drawFormat.LineAlignment = StringAlignment.Center;
+                    drawFormat.Alignment = StringAlignment.Center;
+                    int neighbors = CountNeighborsFinite(x, y);
+                    #endregion
+
                     // Fill the cell with a brush if alive
                     if (universe[x, y] == true)
                     {
+                        // alive
                         e.Graphics.FillRectangle(cellBrush, cellRect);
+                        e.Graphics.DrawString(neighbors.ToString(), font, cellBrushAlive, cellRect, drawFormat);
+                    }
+                    else if (universe[x, y] == false && neighbors != 0)
+                    {
+                        // dead
+                        e.Graphics.DrawString(neighbors.ToString(), font, cellBrushDead, cellRect, drawFormat);
                     }
 
                     // Outline the cell with a pen
@@ -124,7 +147,10 @@ namespace Jennings_Tyler_GOL
             // Cleaning up pens and brushes
             gridPen.Dispose();
             cellBrush.Dispose();
+            cellBrushDead.Dispose();
+            cellBrushAlive.Dispose();
         }
+
 
         private void graphicsPanel1_MouseClick(object sender, MouseEventArgs e)
         {
@@ -203,7 +229,7 @@ namespace Jennings_Tyler_GOL
             
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private void Run_Click(object sender, EventArgs e)
         {
             timer.Enabled = true;
         }
@@ -236,12 +262,12 @@ namespace Jennings_Tyler_GOL
             graphicsPanel1.Invalidate();
         }
 
-        private void toolStripButton2_Click(object sender, EventArgs e)
+        private void Stop_Click(object sender, EventArgs e)
         {
             timer.Enabled = false;
         }
 
-        private void toolStripButton3_Click(object sender, EventArgs e)
+        private void Next_Click(object sender, EventArgs e)
         {
             NextGeneration();
             graphicsPanel1.Invalidate();
