@@ -102,7 +102,7 @@ namespace Jennings_Tyler_GOL
             this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.newToolStripMenuItem.Text = "&New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
@@ -254,7 +254,7 @@ namespace Jennings_Tyler_GOL
             this.newToolStripButton.Name = "newToolStripButton";
             this.newToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.newToolStripButton.Text = "&New";
-            this.newToolStripButton.Click += new System.EventHandler(this.newToolStripButton_Click);
+            this.newToolStripButton.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripButton
             // 
