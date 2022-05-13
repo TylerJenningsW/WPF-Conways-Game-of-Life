@@ -127,9 +127,9 @@ namespace Jennings_Tyler_GOL
                     #endregion
 
                     // Fill the cell with a brush if alive
-                    if (universe[x, y] == true && neighbors == 1 || neighbors > 3)
+                    if ((universe[x, y] == true && neighbors == 1) || (universe[x, y] == true && neighbors > 3))
                     {
-                        // alive
+                        // dead
                         e.Graphics.FillRectangle(cellBrush, cellRect);
                         e.Graphics.DrawString(neighbors.ToString(), font, cellBrushDead, cellRect, drawFormat);
                     }
