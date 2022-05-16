@@ -88,7 +88,9 @@ namespace Jennings_Tyler_GOL
         // The event called by the timer every Interval milliseconds.
         private void Timer_Tick(object sender, EventArgs e)
         {
+            // Call the next gen for every tie the clock ticks
             NextGeneration();
+            // repaint to update
             graphicsPanel1.Invalidate();
         }
 
@@ -194,6 +196,7 @@ namespace Jennings_Tyler_GOL
             if (e.Button == MouseButtons.Left)
             {
                 // Calculate the width and height of each cell in pixels
+                // convert to floats explicitly for edge cases
                 float cellWidth = ((float)graphicsPanel1.ClientSize.Width) / ((float)universe.GetLength(0));
                 float cellHeight = ((float)graphicsPanel1.ClientSize.Height) / ((float)universe.GetLength(1));
 
@@ -256,16 +259,13 @@ namespace Jennings_Tyler_GOL
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // exit the game
             this.Close();
-        }
-
-        private void cellDimensionsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            
         }
 
         private void Run_Click(object sender, EventArgs e)
         {
+            // begin the game
             timer.Enabled = true;
         }
 
@@ -277,19 +277,23 @@ namespace Jennings_Tyler_GOL
                 // Iterate through the universe in the x, left to right
                 for (int x = 0; x < universe.GetLength(0); x++)
                 {
+                    // reset the entire array to false
                     universe[x, y] = false;
                 }
             }
+            // repaint
             graphicsPanel1.Invalidate();
         }
 
         private void Stop_Click(object sender, EventArgs e)
         {
+            // pause the game
             timer.Enabled = false;
         }
 
         private void Next_Click(object sender, EventArgs e)
         {
+            // jump to the next generation and repaint
             NextGeneration();
             graphicsPanel1.Invalidate();
         }
