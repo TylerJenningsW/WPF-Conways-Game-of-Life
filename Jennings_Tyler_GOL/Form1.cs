@@ -50,23 +50,32 @@ namespace Jennings_Tyler_GOL
                 for (int x = 0; x < universe.GetLength(0); x++)
                 {
                     // Implement the game logic
+                    // A. Living cells with less than 2 living neighbors die in the next generation.
+                    // B. Living cells with more than 3 living neighbors die in the next generation.
+                    // C. Living cells with 2 or 3 living neighbors live in the next generation.
+                    // D. Dead cells with exactly 3 living neighbors live in the next generation.
                     int count = CountNeighborsFinite(x, y);
+                    // A.
                     if (universe[x, y] == true && count < 2)
                     {
                         scratchPad[x, y] = false;
                     }
+                    // B.
                     else if (universe[x, y] == true && count > 3)
                     {
                         scratchPad[x, y] = false;
                     }
+                    // C.
                     else if (universe[x, y] == true && count == 2)
                     {
                         scratchPad[x, y] = true;
                     }
+                    // C. 
                     else if (universe[x, y] == true && count == 3)
                     {
                         scratchPad[x, y] = true;
                     }
+                    // D.
                     else if (universe[x, y] == false && count == 3)
                     {
                         scratchPad[x, y] = true;
@@ -299,6 +308,18 @@ namespace Jennings_Tyler_GOL
             // jump to the next generation and repaint
             NextGeneration();
             graphicsPanel1.Invalidate();
+        }
+
+        private void colorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDialog = new ColorDialog();
+
+            colorDialog.ShowDialog();
+        }
+
+        private void modalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
