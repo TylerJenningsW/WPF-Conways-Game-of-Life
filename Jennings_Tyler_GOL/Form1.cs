@@ -328,5 +328,17 @@ namespace Jennings_Tyler_GOL
         {
 
         }
+
+        private void cellColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            ColorDialog colorDialog = new ColorDialog();
+
+            if (DialogResult.OK == colorDialog.ShowDialog())
+            {
+                cellColor = colorDialog.Color;
+            }
+            graphicsPanel1.Invalidate();
+        }
     }
 }
