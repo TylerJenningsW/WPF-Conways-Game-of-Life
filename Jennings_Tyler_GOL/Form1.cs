@@ -128,14 +128,17 @@ namespace Jennings_Tyler_GOL
                     // font for displaying neighbor count
                     #region font
                     Font font = new Font("Arial", 24, FontStyle.Bold, GraphicsUnit.Point);
+                    // text format for centering text
                     StringFormat drawFormat = new StringFormat();
                     drawFormat.LineAlignment = StringAlignment.Center;
                     drawFormat.Alignment = StringAlignment.Center;
+                    // the neighbors to count
                     int neighbors = CountNeighborsFinite(x, y);
                     #endregion
 
                     // Fill the cell with a brush if alive
                     // rectangle fill indicates alive aka true
+                    // draw string indicates neighbor count and dead (red) or alive (green)
                     if (universe[x, y] == true && neighbors == 0)
                     {
                         // alive now and dead in the next gen, hide '0' string
