@@ -14,8 +14,6 @@ namespace Jennings_Tyler_GOL
     {
         // The universe array
         bool[,] universe = new bool[40, 40];
-        // Second universe array to copy from
-        bool[,] scratchPad = new bool[40, 40];
 
         // Drawing colors
         Color gridColor = Color.Black;
@@ -42,6 +40,9 @@ namespace Jennings_Tyler_GOL
         // Calculate the next generation of cells
         private void NextGeneration()
         {
+
+            // Second universe array to copy from
+            bool[,] scratchPad = new bool[40, 40];
             // Iterate through the universe in the y, top to bottom
             for (int y = 0; y < universe.GetLength(1); y++)
             {
@@ -50,19 +51,23 @@ namespace Jennings_Tyler_GOL
                 {
                     // Implement the game logic
                     int count = CountNeighborsFinite(x, y);
-                    if (count < 2)
+                    if (universe[x, y] == true && count < 2)
                     {
                         scratchPad[x, y] = false;
                     }
-                    else if (count > 3)
+                    else if (universe[x, y] == true && count > 3)
                     {
                         scratchPad[x, y] = false;
                     }
-                    else if (universe[x, y] == true && (count == 2 || count == 3))
+                    else if (universe[x, y] == true && count == 2)
                     {
                         scratchPad[x, y] = true;
                     }
-                    else if (universe[x, y] == false && (count == 3))
+                    else if (universe[x, y] == true && count == 3)
+                    {
+                        scratchPad[x, y] = true;
+                    }
+                    else if (universe[x, y] == false && count == 3)
                     {
                         scratchPad[x, y] = true;
                     }
@@ -72,6 +77,7 @@ namespace Jennings_Tyler_GOL
             bool[,] temp = universe;
             universe = scratchPad;
             scratchPad = temp;
+
             // Increment generation count
             generations++;
 
@@ -127,30 +133,44 @@ namespace Jennings_Tyler_GOL
                     #endregion
 
                     // Fill the cell with a brush if alive
-                    if ((universe[x, y] == true && neighbors == 1) || (universe[x, y] == true && neighbors > 3))
+                    // rectangle fill indicates alive aka true
+                    if (universe[x, y] == true && neighbors == 0)
                     {
-                        // dead
+                        // alive now and dead in the next gen, hide '0' string
+                        e.Graphics.FillRectangle(cellBrush, cellRect);
+                    }
+                    else if (universe[x, y] == true && neighbors < 2)
+                    {
+                        // alive now and dead in the next gen
                         e.Graphics.FillRectangle(cellBrush, cellRect);
                         e.Graphics.DrawString(neighbors.ToString(), font, cellBrushDead, cellRect, drawFormat);
                     }
-                    else if (universe[x, y] == true && neighbors <= 3 && neighbors != 0)
+                    else if (universe[x, y] == true && neighbors > 3)
                     {
-                        // alive
+                        // alive now and dead in the next gen
+                        e.Graphics.FillRectangle(cellBrush, cellRect);
+                        e.Graphics.DrawString(neighbors.ToString(), font, cellBrushDead, cellRect, drawFormat);
+                    }
+                    else if (universe[x, y] == true && neighbors == 2)
+                    {
+                        // alive now and in the next gen
                         e.Graphics.FillRectangle(cellBrush, cellRect);
                         e.Graphics.DrawString(neighbors.ToString(), font, cellBrushAlive, cellRect, drawFormat);
                     }
-                    else if (universe[x, y] == true)
+                    else if (universe[x, y] == true && neighbors == 3)
                     {
-                        // alive
+                        // alive now and in the next gen
                         e.Graphics.FillRectangle(cellBrush, cellRect);
-                    }
-                    else if (neighbors == 3)
-                    {
                         e.Graphics.DrawString(neighbors.ToString(), font, cellBrushAlive, cellRect, drawFormat);
                     }
-                    else if (universe[x, y] == false && neighbors != 0)
+                    else if (universe[x, y] == false && neighbors == 3)
                     {
-                        // dead
+                        // dead now and alive in the next gen
+                        e.Graphics.DrawString(neighbors.ToString(), font, cellBrushAlive, cellRect, drawFormat);
+                    }
+                    else if (universe[x, y] == false && neighbors > 0)
+                    {
+                        // dead now and in the next gen, avoid '0' spam
                         e.Graphics.DrawString(neighbors.ToString(), font, cellBrushDead, cellRect, drawFormat);
                     }
 
@@ -164,6 +184,7 @@ namespace Jennings_Tyler_GOL
             cellBrush.Dispose();
             cellBrushDead.Dispose();
             cellBrushAlive.Dispose();
+
         }
 
 
@@ -185,7 +206,6 @@ namespace Jennings_Tyler_GOL
                 int y = (int)tempY;
                 // Toggle the cell's state
                 universe[x, y] = !universe[x, y];
-
                 // Tell Windows you need to repaint
                 graphicsPanel1.Invalidate();
             }
