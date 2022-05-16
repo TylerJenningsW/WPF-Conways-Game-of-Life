@@ -129,6 +129,7 @@ namespace Jennings_Tyler_GOL
                 {
                     // A rectangle to represent each cell in pixels
                     RectangleF cellRect = RectangleF.Empty;
+                    // Edge case explicit float cast
                     cellRect.X = (float)x * cellWidth;
                     cellRect.Y = (float)y * cellHeight;
                     cellRect.Width = cellWidth;
@@ -139,6 +140,7 @@ namespace Jennings_Tyler_GOL
                     Font font = new Font("Arial", 24, FontStyle.Bold, GraphicsUnit.Point);
                     // text format for centering text
                     StringFormat drawFormat = new StringFormat();
+                    // the centering
                     drawFormat.LineAlignment = StringAlignment.Center;
                     drawFormat.Alignment = StringAlignment.Center;
                     // the neighbors to count
@@ -314,7 +316,12 @@ namespace Jennings_Tyler_GOL
         {
             ColorDialog colorDialog = new ColorDialog();
 
-            colorDialog.ShowDialog();
+            if (DialogResult.OK == colorDialog.ShowDialog())
+            {
+                graphicsPanel1.BackColor = colorDialog.Color;
+            }
+            graphicsPanel1.Invalidate();
+
         }
 
         private void modalToolStripMenuItem_Click(object sender, EventArgs e)

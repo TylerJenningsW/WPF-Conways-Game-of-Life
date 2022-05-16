@@ -66,10 +66,11 @@ namespace Jennings_Tyler_GOL
             this.Next = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelGenerations = new System.Windows.Forms.ToolStripStatusLabel();
-            this.graphicsPanel1 = new Jennings_Tyler_GOL.GraphicsPanel();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.colorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.graphicsPanel1 = new Jennings_Tyler_GOL.GraphicsPanel();
+            this.backToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -215,6 +216,8 @@ namespace Jennings_Tyler_GOL
             // 
             // settingsToolStripMenuItem
             // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.backToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.settingsToolStripMenuItem.Text = "Settings";
@@ -362,9 +365,32 @@ namespace Jennings_Tyler_GOL
             this.toolStripStatusLabelGenerations.Size = new System.Drawing.Size(90, 17);
             this.toolStripStatusLabelGenerations.Text = "Generations = 0";
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.colorToolStripMenuItem,
+            this.modalToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(109, 48);
+            // 
+            // colorToolStripMenuItem
+            // 
+            this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
+            this.colorToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.colorToolStripMenuItem.Text = "Color";
+            this.colorToolStripMenuItem.Click += new System.EventHandler(this.colorToolStripMenuItem_Click);
+            // 
+            // modalToolStripMenuItem
+            // 
+            this.modalToolStripMenuItem.Name = "modalToolStripMenuItem";
+            this.modalToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.modalToolStripMenuItem.Text = "Modal";
+            this.modalToolStripMenuItem.Click += new System.EventHandler(this.modalToolStripMenuItem_Click);
+            // 
             // graphicsPanel1
             // 
             this.graphicsPanel1.BackColor = System.Drawing.SystemColors.Window;
+            this.graphicsPanel1.ContextMenuStrip = this.contextMenuStrip1;
             this.graphicsPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.graphicsPanel1.Location = new System.Drawing.Point(0, 49);
             this.graphicsPanel1.Name = "graphicsPanel1";
@@ -373,27 +399,12 @@ namespace Jennings_Tyler_GOL
             this.graphicsPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.graphicsPanel1_Paint);
             this.graphicsPanel1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.graphicsPanel1_MouseClick);
             // 
-            // contextMenuStrip1
+            // backToolStripMenuItem
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.colorToolStripMenuItem,
-            this.modalToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 70);
-            // 
-            // colorToolStripMenuItem
-            // 
-            this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
-            this.colorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.colorToolStripMenuItem.Text = "Color";
-            this.colorToolStripMenuItem.Click += new System.EventHandler(this.colorToolStripMenuItem_Click);
-            // 
-            // modalToolStripMenuItem
-            // 
-            this.modalToolStripMenuItem.Name = "modalToolStripMenuItem";
-            this.modalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.modalToolStripMenuItem.Text = "Modal";
-            this.modalToolStripMenuItem.Click += new System.EventHandler(this.modalToolStripMenuItem_Click);
+            this.backToolStripMenuItem.Name = "backToolStripMenuItem";
+            this.backToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.backToolStripMenuItem.Text = "Back Color";
+            this.backToolStripMenuItem.Click += new System.EventHandler(this.colorToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -460,6 +471,7 @@ namespace Jennings_Tyler_GOL
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem colorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem modalToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem backToolStripMenuItem;
     }
 }
 
