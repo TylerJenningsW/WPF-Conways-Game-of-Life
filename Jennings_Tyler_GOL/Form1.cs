@@ -31,11 +31,16 @@ namespace Jennings_Tyler_GOL
         // Generation count
         int generations = 0;
 
+        bool isToroidal;
+
+
         public Form1()
         {
             InitializeComponent();
-            // Read the property
+            // Read the properties
             graphicsPanel1.BackColor = Properties.Settings.Default.PanelColor;
+            gridColor = Properties.Settings.Default.gridColor;
+            cellColor = Properties.Settings.Default.cellColor;
             // Setup the timer
             timer.Interval = interval; // milliseconds
             timer.Tick += Timer_Tick;
@@ -44,7 +49,16 @@ namespace Jennings_Tyler_GOL
 
         // Calculate the next generation of cells
         private void NextGeneration()
-        {            
+        {
+            if (toroidalToolStripMenuItem.Checked == true)
+            {
+                isToroidal = true;
+            }
+
+            if (isToroidal)
+            {
+
+            }
             // Second universe array to copy from
             bool[,] scratchPad = new bool[uWidth, uHeight];
             // Iterate through the universe in the y, top to bottom
@@ -53,12 +67,20 @@ namespace Jennings_Tyler_GOL
                 // Iterate through the universe in the x, left to right
                 for (int x = 0; x < universe.GetLength(0); x++)
                 {
+                    int count;
+                    if (isToroidal)
+                    {
+                        count = CountNeighborsToroidal(x, y);
+                    }
+                    else
+                    {
+                        count = CountNeighborsFinite(x, y);
+                    }
                     // Implement the game logic
                     // A. Living cells with less than 2 living neighbors die in the next generation.
                     // B. Living cells with more than 3 living neighbors die in the next generation.
                     // C. Living cells with 2 or 3 living neighbors live in the next generation.
                     // D. Dead cells with exactly 3 living neighbors live in the next generation.
-                    int count = CountNeighborsFinite(x, y);
                     // A.
                     if (universe[x, y] == true && count < 2)
                     {
@@ -286,7 +308,47 @@ namespace Jennings_Tyler_GOL
             }
             return count;
         }
-
+        private int CountNeighborsToroidal(int x, int y)
+        {
+            int count = 0;
+            int xLen = universe.GetLength(0);
+            int yLen = universe.GetLength(1);
+            for (int yOffset = -1; yOffset <= 1; yOffset++)
+            {
+                for (int xOffset = -1; xOffset <= 1; xOffset++)
+                {
+                    int xCheck = x + xOffset;
+                    int yCheck = y + yOffset;
+                    // if xOffset and yOffset are both equal to 0 then continue
+                    if (xOffset == 0 && yOffset == 0)
+                    {
+                        continue;
+                    }
+                    // if xCheck is less than 0 then set to xLen - 1
+                    if (xCheck < 0)
+                    {
+                        xCheck = xLen - 1;
+                    }
+                    // if yCheck is less than 0 then set to yLen - 1
+                    if (yCheck < 0)
+                    {
+                        yCheck = yLen - 1;
+                    }
+                    // if xCheck is greater than or equal too xLen then set to 0
+                    if (xCheck >= xLen)
+                    {
+                        xCheck = 0;
+                    }
+                    // if yCheck is greater than or equal too yLen then set to 0
+                    if (yCheck >= yLen)
+                    {
+                        yCheck = 0;
+                    }
+                    if (universe[xCheck, yCheck] == true) count++;
+                }
+            }
+            return count;
+        }
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // exit the game
@@ -386,8 +448,11 @@ namespace Jennings_Tyler_GOL
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            // Update the property
+            // Update the properties
             Properties.Settings.Default.PanelColor = graphicsPanel1.BackColor;
+            Properties.Settings.Default.gridColor = gridColor;
+            Properties.Settings.Default.cellColor = cellColor;
+
 
             Properties.Settings.Default.Save();
         }
