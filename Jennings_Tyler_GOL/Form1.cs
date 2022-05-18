@@ -14,7 +14,11 @@ namespace Jennings_Tyler_GOL
     {
         // The universe array
         bool[,] universe = new bool[40, 40];
-
+        // universe dimensions
+        public int uWidth = 40;
+        public int uHeight = 40;
+        // timer interval
+        public int interval = 100;
         // Drawing colors
         Color gridColor = Color.Black;
         Color cellColor = Color.Gray;
@@ -30,9 +34,8 @@ namespace Jennings_Tyler_GOL
         public Form1()
         {
             InitializeComponent();
-
             // Setup the timer
-            timer.Interval = 100; // milliseconds
+            timer.Interval = interval; // milliseconds
             timer.Tick += Timer_Tick;
             timer.Enabled = false; // start timer running
         }
@@ -40,9 +43,9 @@ namespace Jennings_Tyler_GOL
         // Calculate the next generation of cells
         private void NextGeneration()
         {
-
+            
             // Second universe array to copy from
-            bool[,] scratchPad = new bool[40, 40];
+            bool[,] scratchPad = new bool[uWidth, uHeight];
             // Iterate through the universe in the y, top to bottom
             for (int y = 0; y < universe.GetLength(1); y++)
             {
@@ -315,7 +318,7 @@ namespace Jennings_Tyler_GOL
         private void colorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ColorDialog colorDialog = new ColorDialog();
-
+            colorDialog.Color = graphicsPanel1.BackColor;
             if (DialogResult.OK == colorDialog.ShowDialog())
             {
                 graphicsPanel1.BackColor = colorDialog.Color;
@@ -326,19 +329,40 @@ namespace Jennings_Tyler_GOL
 
         private void modalToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            OptionsDialog optionsDialog = new OptionsDialog();
+            optionsDialog.TimeInterval = interval;
+            optionsDialog.UniverseWidth = uWidth;
+            optionsDialog.UniverseHeight = uHeight;
+            if (DialogResult.OK == optionsDialog.ShowDialog())
+            {
+                interval = optionsDialog.TimeInterval;
+                uWidth = optionsDialog.UniverseWidth;
+                uHeight = optionsDialog.UniverseHeight;
+            }
+            universe = new bool[uWidth, uHeight];
+            graphicsPanel1.Invalidate();
         }
 
         private void cellColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             ColorDialog colorDialog = new ColorDialog();
-
+            colorDialog.Color = cellColor;
             if (DialogResult.OK == colorDialog.ShowDialog())
             {
                 cellColor = colorDialog.Color;
+                graphicsPanel1.Invalidate();
             }
-            graphicsPanel1.Invalidate();
+        }
+
+        private void gridColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog colorDialog = new ColorDialog();
+            colorDialog.Color = gridColor;
+            if (DialogResult.OK == colorDialog.ShowDialog())
+            {
+                gridColor = colorDialog.Color;
+                graphicsPanel1.Invalidate();
+            }
         }
     }
 }
