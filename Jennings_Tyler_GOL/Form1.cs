@@ -34,6 +34,8 @@ namespace Jennings_Tyler_GOL
         public Form1()
         {
             InitializeComponent();
+            // Read the property
+            graphicsPanel1.BackColor = Properties.Settings.Default.PanelColor;
             // Setup the timer
             timer.Interval = interval; // milliseconds
             timer.Tick += Timer_Tick;
@@ -42,8 +44,7 @@ namespace Jennings_Tyler_GOL
 
         // Calculate the next generation of cells
         private void NextGeneration()
-        {
-            
+        {            
             // Second universe array to copy from
             bool[,] scratchPad = new bool[uWidth, uHeight];
             // Iterate through the universe in the y, top to bottom
@@ -140,7 +141,7 @@ namespace Jennings_Tyler_GOL
 
                     // font for displaying neighbor count
                     #region font
-                    Font font = new Font("Arial", 24, FontStyle.Bold, GraphicsUnit.Point);
+                    Font font = new Font("Arial", 18);
                     // text format for centering text
                     StringFormat drawFormat = new StringFormat();
                     // the centering
@@ -231,6 +232,18 @@ namespace Jennings_Tyler_GOL
             }
         }
 
+        private void Randomize()
+        {
+            // Iterate through the universe in the y, top to bottom
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                // Iterate through the universe in the x, left to right
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+
+                }
+            }
+        }
         private int CountNeighborsFinite(int x, int y)
         {
             int count = 0;
@@ -327,9 +340,11 @@ namespace Jennings_Tyler_GOL
 
         }
 
-        private void modalToolStripMenuItem_Click(object sender, EventArgs e)
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OptionsDialog optionsDialog = new OptionsDialog();
+            int tempW = uWidth;
+            int tempH = uHeight;
             optionsDialog.TimeInterval = interval;
             optionsDialog.UniverseWidth = uWidth;
             optionsDialog.UniverseHeight = uHeight;
@@ -338,8 +353,12 @@ namespace Jennings_Tyler_GOL
                 interval = optionsDialog.TimeInterval;
                 uWidth = optionsDialog.UniverseWidth;
                 uHeight = optionsDialog.UniverseHeight;
+                timer.Interval = interval;
             }
-            universe = new bool[uWidth, uHeight];
+            if (tempW != uWidth || tempH != uHeight)
+            {
+                universe = new bool[uWidth, uHeight];
+            }
             graphicsPanel1.Invalidate();
         }
 
@@ -363,6 +382,14 @@ namespace Jennings_Tyler_GOL
                 gridColor = colorDialog.Color;
                 graphicsPanel1.Invalidate();
             }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            // Update the property
+            Properties.Settings.Default.PanelColor = graphicsPanel1.BackColor;
+
+            Properties.Settings.Default.Save();
         }
     }
 }
