@@ -118,5 +118,17 @@ namespace Jennings_Tyler_GOL.Properties {
                 this["interval"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool isToroidal {
+            get {
+                return ((bool)(this["isToroidal"]));
+            }
+            set {
+                this["isToroidal"] = value;
+            }
+        }
     }
 }

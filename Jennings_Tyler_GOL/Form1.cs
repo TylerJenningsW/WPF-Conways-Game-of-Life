@@ -34,7 +34,7 @@ namespace Jennings_Tyler_GOL
         // Generation count
         int generations = 0;
 
-        bool isToroidal;
+        bool isToroidal = Properties.Settings.Default.isToroidal;
         bool showNeighbors;
         bool gridCheck;
         bool hudCheck;
@@ -52,13 +52,19 @@ namespace Jennings_Tyler_GOL
         }
         private void ConditionChecks()
         {
-            if (toroidalToolStripMenuItem.Checked == true)
+            toroidalToolStripMenuItem.Checked = isToroidal;
+            if (isToroidal == false)
             {
-                isToroidal = true;
+                finiteToolStripMenuItem.Checked = true;
             }
             else
             {
-                isToroidal = false;
+                finiteToolStripMenuItem.Checked = false;
+            }
+            if (finiteToolStripMenuItem.Checked == false)
+            {
+                toroidalToolStripMenuItem.Checked = true;
+                isToroidal = true;
             }
             #region show neighbors
             if (neighborCountToolStripMenuItem.Checked == true)
@@ -93,6 +99,8 @@ namespace Jennings_Tyler_GOL
                 gridCheck = false;
             }
             #endregion
+
+            #region HUD
             if (hUDToolStripMenuItem.Checked == true)
             {
                 hudCheck = true;
@@ -101,6 +109,7 @@ namespace Jennings_Tyler_GOL
             {
                 hudCheck = false;
             }
+            #endregion
         }
         private void LoadSettings()
         {
@@ -113,6 +122,7 @@ namespace Jennings_Tyler_GOL
             gridColorx10 = Properties.Settings.Default.gridColorx10;
             cellColor = Properties.Settings.Default.cellColor;
             seed = Properties.Settings.Default.Seed;
+            isToroidal = Properties.Settings.Default.isToroidal;
         }
         // Calculate the next generation of cells
         private void NextGeneration()
@@ -122,7 +132,6 @@ namespace Jennings_Tyler_GOL
             // Iterate through the universe in the y, top to bottom
             for (int y = 0; y < universe.GetLength(1); y++)
             {
-                ConditionChecks();
                 // Iterate through the universe in the x, left to right
                 for (int x = 0; x < universe.GetLength(0); x++)
                 {
@@ -446,11 +455,6 @@ namespace Jennings_Tyler_GOL
             }
             return count;
         }
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // exit the game
-            this.Close();
-        }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -486,7 +490,7 @@ namespace Jennings_Tyler_GOL
             NextGeneration();
             graphicsPanel1.Invalidate();
         }
-
+        #region Settings Menu
         private void colorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ColorDialog colorDialog = new ColorDialog();
@@ -498,29 +502,6 @@ namespace Jennings_Tyler_GOL
             graphicsPanel1.Invalidate();
 
         }
-
-        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OptionsDialog optionsDialog = new OptionsDialog();
-            int tempW = uWidth;
-            int tempH = uHeight;
-            optionsDialog.TimeInterval = interval;
-            optionsDialog.UniverseWidth = uWidth;
-            optionsDialog.UniverseHeight = uHeight;
-            if (DialogResult.OK == optionsDialog.ShowDialog())
-            {
-                interval = optionsDialog.TimeInterval;
-                uWidth = optionsDialog.UniverseWidth;
-                uHeight = optionsDialog.UniverseHeight;
-                timer.Interval = interval;
-            }
-            if (tempW != uWidth || tempH != uHeight)
-            {
-                universe = new bool[uWidth, uHeight];
-            }
-            graphicsPanel1.Invalidate();
-        }
-
         private void cellColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ColorDialog colorDialog = new ColorDialog();
@@ -554,7 +535,42 @@ namespace Jennings_Tyler_GOL
                 graphicsPanel1.Invalidate();
             }
         }
-        #region random menu methods
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OptionsDialog optionsDialog = new OptionsDialog();
+            int tempW = uWidth;
+            int tempH = uHeight;
+            optionsDialog.TimeInterval = interval;
+            optionsDialog.UniverseWidth = uWidth;
+            optionsDialog.UniverseHeight = uHeight;
+            if (DialogResult.OK == optionsDialog.ShowDialog())
+            {
+                interval = optionsDialog.TimeInterval;
+                uWidth = optionsDialog.UniverseWidth;
+                uHeight = optionsDialog.UniverseHeight;
+                timer.Interval = interval;
+            }
+            if (tempW != uWidth || tempH != uHeight)
+            {
+                universe = new bool[uWidth, uHeight];
+            }
+            graphicsPanel1.Invalidate();
+        }
+
+        private void resetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reset();
+            LoadSettings();
+        }
+
+        private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reload();
+            LoadSettings();
+        }
+        #endregion
+
+        #region Random Menu
         private void Randomize()
         {
             Random rand = new Random(seed);
@@ -604,7 +620,7 @@ namespace Jennings_Tyler_GOL
         #endregion
 
 
-        #region View menu methods
+        #region View Menu
         private void hUDToolStripMenuItem_Click(object sender, EventArgs e)
         {
             hUDContextMenuItem.Checked = hUDToolStripMenuItem.Checked;
@@ -644,8 +660,43 @@ namespace Jennings_Tyler_GOL
             ConditionChecks();
             graphicsPanel1.Invalidate();
         }
+        private void finiteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (finiteToolStripMenuItem.Checked == false)
+            {
+                toroidalToolStripMenuItem.Checked = true;
+                isToroidal = true;
+            }
+            else
+            {
+                toroidalToolStripMenuItem.Checked = false;
+                isToroidal = false;
+
+            }
+        }
+
+        private void toroidalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (toroidalToolStripMenuItem.Checked == false)
+            {
+                finiteToolStripMenuItem.Checked = true;
+                isToroidal = false;
+            }
+            else
+            {
+                finiteToolStripMenuItem.Checked = false;
+                isToroidal = true;
+
+            }
+        }
         #endregion
 
+        #region Closing
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // exit the game
+            this.Close();
+        }
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             // Update the properties
@@ -657,20 +708,9 @@ namespace Jennings_Tyler_GOL
             Properties.Settings.Default.gridColorx10 = gridColorx10;
             Properties.Settings.Default.cellColor = cellColor;
             Properties.Settings.Default.Seed = seed;
+            Properties.Settings.Default.isToroidal = isToroidal;
             Properties.Settings.Default.Save();
         }
-
-        private void resetToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.Reset();
-            LoadSettings();
-        }
-
-        private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.Reload();
-            LoadSettings();
-        }
-
+        #endregion
     }
 }
