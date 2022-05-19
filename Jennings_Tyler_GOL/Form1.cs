@@ -34,16 +34,20 @@ namespace Jennings_Tyler_GOL
         // Generation count
         int generations = 0;
 
+        int cellCount = 0;
+
+        // bools for clarity in view menu
         bool isToroidal = Properties.Settings.Default.isToroidal;
-        bool showNeighbors;
-        bool gridCheck;
-        bool hudCheck;
+        bool showNeighbors = Properties.Settings.Default.showNeighbors;
+        bool gridCheck = Properties.Settings.Default.gridCheck;
+        bool hudCheck = Properties.Settings.Default.hudCheck;
 
         public Form1()
         {
             InitializeComponent();
             // Read the properties
             LoadSettings();
+
             ConditionChecks();
             // Setup the timer
             timer.Interval = interval; // milliseconds
@@ -52,6 +56,7 @@ namespace Jennings_Tyler_GOL
         }
         private void ConditionChecks()
         {
+            #region Toroidal & Finite
             toroidalToolStripMenuItem.Checked = isToroidal;
             if (isToroidal == false)
             {
@@ -66,53 +71,27 @@ namespace Jennings_Tyler_GOL
                 toroidalToolStripMenuItem.Checked = true;
                 isToroidal = true;
             }
-            #region show neighbors
-            if (neighborCountToolStripMenuItem.Checked == true)
-            {
-                showNeighbors = true;
-                neighborCountContextMenuItem.Checked = true;
-            }
-            else
-            {
-                neighborCountContextMenuItem.Checked = true;
-                showNeighbors = false;
-            }
-            if (neighborCountContextMenuItem.Checked == true)
-            {
-                neighborCountToolStripMenuItem.Checked = true;
-            }
-            else
-            {
-                neighborCountToolStripMenuItem.Checked = false;
-                showNeighbors = false;
+            #endregion
 
-            }
+            #region show neighbors
+            neighborCountToolStripMenuItem.Checked = showNeighbors;
+            neighborCountContextMenuItem.Checked = showNeighbors;
             #endregion
 
             #region grid
-            if (gridToolStripMenuItem.Checked == true)
-            {
-                gridCheck = true;
-            }
-            else
-            {
-                gridCheck = false;
-            }
+            gridToolStripMenuItem.Checked = gridCheck;
+            gridContextMenuItem.Checked = gridCheck;
             #endregion
 
             #region HUD
-            if (hUDToolStripMenuItem.Checked == true)
-            {
-                hudCheck = true;
-            }
-            else
-            {
-                hudCheck = false;
-            }
+            hUDToolStripMenuItem.Checked = hudCheck;
+            hUDContextMenuItem.Checked = hudCheck;
             #endregion
         }
         private void LoadSettings()
         {
+            toolStripStatusLabelInterval.Text = $"Interval = {interval}";
+            toolStripStatusLabelAlive.Text = $"Alive: {cellCount}";
             universe = new bool[uWidth, uHeight];
             uWidth = Properties.Settings.Default.uWidth;
             uHeight = Properties.Settings.Default.uHeight;
@@ -123,6 +102,28 @@ namespace Jennings_Tyler_GOL
             cellColor = Properties.Settings.Default.cellColor;
             seed = Properties.Settings.Default.Seed;
             isToroidal = Properties.Settings.Default.isToroidal;
+            showNeighbors = Properties.Settings.Default.showNeighbors;
+            gridCheck = Properties.Settings.Default.gridCheck;
+            hudCheck = Properties.Settings.Default.hudCheck;
+        }
+        public static Font GetAdjustedFont(Graphics graphic, string str, Font originalFont, SizeF containerSize)
+        {
+            // We utilize MeasureString which we get via a control instance           
+            for (int adjustedSize = (int)originalFont.Size; adjustedSize >= 1; adjustedSize--)
+            {
+                Font testFont = new Font(originalFont.Name, adjustedSize, originalFont.Style, GraphicsUnit.Pixel);
+
+                // Test the string with the new size
+                SizeF adjustedSizeNew = graphic.MeasureString(str, testFont, (int)containerSize.Width);
+                
+                if (containerSize.Height > Convert.ToInt32(adjustedSizeNew.Height))
+                {
+                    // Good font, return it
+                    return testFont;
+                }
+            }
+
+            return new Font(originalFont.Name, 1, originalFont.Style, GraphicsUnit.Pixel);
         }
         // Calculate the next generation of cells
         private void NextGeneration()
@@ -184,9 +185,8 @@ namespace Jennings_Tyler_GOL
 
             // Increment generation count
             generations++;
-
             // Update status strip generations
-            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            toolStripStatusLabelGenerations.Text = $"Generations: {generations}";
         }
         
         // The event called by the timer every Interval milliseconds.
@@ -206,6 +206,7 @@ namespace Jennings_Tyler_GOL
             // CELL HEIGHT = WINDOW HEIGHT / NUMBER OF CELLS IN Y
             float cellHeight = ((float)graphicsPanel1.ClientSize.Height) / ((float)universe.GetLength(1));
 
+            #region Pens and brushes
             // A Pen for drawing the grid lines (color, width)
             Pen gridPen = new Pen(gridColor, 1);
             Pen gridPenx10 = new Pen(gridColorx10, 4);
@@ -216,10 +217,12 @@ namespace Jennings_Tyler_GOL
 
             // A Brush for filling dead cells interiors (color)
             Brush cellBrushDead = new SolidBrush(cellDead);
+            #endregion
+
             // font for displaying neighbor count
             #region font
             Font font = new Font(new FontFamily("Arial"), 20);
-
+            
             // text format for centering text
             StringFormat drawFormat = new StringFormat();
             // the centering
@@ -227,9 +230,7 @@ namespace Jennings_Tyler_GOL
             drawFormat.Alignment = StringAlignment.Center;
             // the neighbors to count
             #endregion
-
-            int cellCount = 0;
-
+            cellCount = 0;
             // Iterate through the universe in the y, top to bottom
             for (int y = 0; y < universe.GetLength(1); y++)
             {
@@ -245,24 +246,26 @@ namespace Jennings_Tyler_GOL
                     cellRect.Height = cellHeight;
 
                     int neighbors = CountNeighborsFinite(x, y);
-                    // Fill the cell with a brush if alive
-                    // rectangle fill indicates alive aka true
-                    // draw string indicates neighbor count and dead (red) or alive (green)
                     if (universe[x, y] == true)
                     {
                         cellCount++;
+                    }
+                    toolStripStatusLabelAlive.Text = $"Alive: {cellCount}";
+                    // Fill the cell with a brush if alive
+                    // rectangle fill indicates alive aka true
+                    // draw string indicates neighbor count and dead (red) or alive (green)
+                    if (showNeighbors == false && gridCheck == true)
+                    {
+                        e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
                     }
                     if (showNeighbors == false && universe[x, y] == true)
                     {
                         e.Graphics.FillRectangle(cellBrush, cellRect);
                     }
-                    else if (showNeighbors == false)
+                    else if (showNeighbors == true)
                     {
-                        e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
-                        continue;
-                    }
-                    else
-                    {
+                        Font f = GetAdjustedFont(e.Graphics, neighbors.ToString(), font, cellRect.Size);
+
                         if (universe[x, y] == true && neighbors == 0)
                         {
                             // alive now and dead in the next gen, hide '0' string
@@ -272,36 +275,37 @@ namespace Jennings_Tyler_GOL
                         {
                             // alive now and dead in the next gen
                             e.Graphics.FillRectangle(cellBrush, cellRect);
-                            e.Graphics.DrawString(neighbors.ToString(), font, cellBrushDead, cellRect, drawFormat);
+                            e.Graphics.DrawString(neighbors.ToString(), f, cellBrushDead, cellRect, drawFormat);
                         }
                         else if ((universe[x, y] == true && neighbors > 3))
                         {
                             // alive now and dead in the next gen
                             e.Graphics.FillRectangle(cellBrush, cellRect);
-                            e.Graphics.DrawString(neighbors.ToString(), font, cellBrushDead, cellRect, drawFormat);
+                            e.Graphics.DrawString(neighbors.ToString(), f, cellBrushDead, cellRect, drawFormat);
                         }
                         else if (universe[x, y] == true && neighbors == 2)
                         {
                             // alive now and in the next gen
                             e.Graphics.FillRectangle(cellBrush, cellRect);
-                            e.Graphics.DrawString(neighbors.ToString(), font, cellBrushAlive, cellRect, drawFormat);
+                            e.Graphics.DrawString(neighbors.ToString(), f, cellBrushAlive, cellRect, drawFormat);
                         }
                         else if (universe[x, y] == true && neighbors == 3)
                         {
                             // alive now and in the next gen
                             e.Graphics.FillRectangle(cellBrush, cellRect);
-                            e.Graphics.DrawString(neighbors.ToString(), font, cellBrushAlive, cellRect, drawFormat);
+                            e.Graphics.DrawString(neighbors.ToString(), f, cellBrushAlive, cellRect, drawFormat);
                         }
                         else if (universe[x, y] == false && neighbors == 3)
                         {
                             // dead now and alive in the next gen
-                            e.Graphics.DrawString(neighbors.ToString(), font, cellBrushAlive, cellRect, drawFormat);
+                            e.Graphics.DrawString(neighbors.ToString(), f, cellBrushAlive, cellRect, drawFormat);
                         }
                         else if (universe[x, y] == false && neighbors > 0)
                         {
                             // dead now and in the next gen, avoid '0' spam
-                            e.Graphics.DrawString(neighbors.ToString(), font, cellBrushDead, cellRect, drawFormat);
+                            e.Graphics.DrawString(neighbors.ToString(), f, cellBrushDead, cellRect, drawFormat);
                         }
+                        f.Dispose();
                     }
                     // Outline the cell with a pen
                     if (gridCheck == true)
@@ -309,11 +313,11 @@ namespace Jennings_Tyler_GOL
                         e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
                     }
 
-                    if (y % 10 == 0)
+                    if (y % 10 == 0 && gridCheck == true)
                     {
                         e.Graphics.DrawLine(gridPenx10, 0, cellRect.Y, graphicsPanel1.Width, cellRect.Y);
                     }
-                    if (x % 10 == 0)
+                    if (x % 10 == 0 && gridCheck == true)
                     {
                         e.Graphics.DrawLine(gridPenx10, cellRect.X, 0, cellRect.X, graphicsPanel1.Height);
 
@@ -344,6 +348,7 @@ namespace Jennings_Tyler_GOL
             cellBrush.Dispose();
             cellBrushDead.Dispose();
             cellBrushAlive.Dispose();
+            font.Dispose();
 
         }
 
@@ -369,6 +374,111 @@ namespace Jennings_Tyler_GOL
                 universe[x, y] = !universe[x, y];
                 // Tell Windows you need to repaint
                 graphicsPanel1.Invalidate();
+            }
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Iterate through the universe in the y, top to bottom
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                // Iterate through the universe in the x, left to right
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    // reset the entire array to false
+                    universe[x, y] = false;
+                }
+            }
+            // repaint
+            graphicsPanel1.Invalidate();
+        }
+        #region Game State
+        private void Run_Click(object sender, EventArgs e)
+        {
+            // begin the game
+            timer.Enabled = true;
+        }
+
+        private void Stop_Click(object sender, EventArgs e)
+        {
+            // pause the game
+            timer.Enabled = false;
+        }
+
+        private void Next_Click(object sender, EventArgs e)
+        {
+            // jump to the next generation and repaint
+            NextGeneration();
+            graphicsPanel1.Invalidate();
+        }
+        #endregion
+
+        #region View Menu
+        private void hUDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            hUDContextMenuItem.Checked = hUDToolStripMenuItem.Checked;
+            hudCheck = hUDToolStripMenuItem.Checked;
+            graphicsPanel1.Invalidate();
+        }
+
+        private void HUDContextMenuItem_Click(object sender, EventArgs e)
+        {
+            hUDToolStripMenuItem.Checked = hUDContextMenuItem.Checked;
+            hudCheck = hUDContextMenuItem.Checked;
+            graphicsPanel1.Invalidate();
+        }
+        private void neighborCountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            neighborCountContextMenuItem.Checked = neighborCountToolStripMenuItem.Checked;
+            showNeighbors = neighborCountToolStripMenuItem.Checked;
+            graphicsPanel1.Invalidate();
+        }
+        private void neighborCountContextMenuItem_Click(object sender, EventArgs e)
+        {
+            neighborCountToolStripMenuItem.Checked = neighborCountContextMenuItem.Checked;
+            showNeighbors = neighborCountContextMenuItem.Checked;
+            graphicsPanel1.Invalidate();
+        }
+
+        private void gridToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            gridContextMenuItem.Checked = gridToolStripMenuItem.Checked;
+            gridCheck = gridToolStripMenuItem.Checked;
+            graphicsPanel1.Invalidate();
+        }
+        private void gridContextMenuItem_Click(object sender, EventArgs e)
+        {
+            gridToolStripMenuItem.Checked = gridContextMenuItem.Checked;
+            gridCheck = gridContextMenuItem.Checked;
+            graphicsPanel1.Invalidate();
+        }
+        private void finiteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (finiteToolStripMenuItem.Checked == false)
+            {
+                toroidalToolStripMenuItem.Checked = true;
+                isToroidal = true;
+            }
+            else
+            {
+                toroidalToolStripMenuItem.Checked = false;
+                isToroidal = false;
+
+            }
+        }
+
+        private void toroidalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (toroidalToolStripMenuItem.Checked == false)
+            {
+                finiteToolStripMenuItem.Checked = true;
+                isToroidal = false;
+            }
+            else
+            {
+                finiteToolStripMenuItem.Checked = false;
+                isToroidal = true;
+
             }
         }
 
@@ -455,41 +565,8 @@ namespace Jennings_Tyler_GOL
             }
             return count;
         }
+        #endregion
 
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // Iterate through the universe in the y, top to bottom
-            for (int y = 0; y < universe.GetLength(1); y++)
-            {
-                // Iterate through the universe in the x, left to right
-                for (int x = 0; x < universe.GetLength(0); x++)
-                {
-                    // reset the entire array to false
-                    universe[x, y] = false;
-                }
-            }
-            // repaint
-            graphicsPanel1.Invalidate();
-        }
-
-        private void Run_Click(object sender, EventArgs e)
-        {
-            // begin the game
-            timer.Enabled = true;
-        }
-
-        private void Stop_Click(object sender, EventArgs e)
-        {
-            // pause the game
-            timer.Enabled = false;
-        }
-
-        private void Next_Click(object sender, EventArgs e)
-        {
-            // jump to the next generation and repaint
-            NextGeneration();
-            graphicsPanel1.Invalidate();
-        }
         #region Settings Menu
         private void colorToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -526,7 +603,6 @@ namespace Jennings_Tyler_GOL
 
         private void gridx10ColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             ColorDialog colorDialog = new ColorDialog();
             colorDialog.Color = gridColorx10;
             if (DialogResult.OK == colorDialog.ShowDialog())
@@ -537,23 +613,32 @@ namespace Jennings_Tyler_GOL
         }
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Construct the options form
             OptionsDialog optionsDialog = new OptionsDialog();
+            // We only want a new universe if we actually updated it
+            // So use these variables to check if we did
             int tempW = uWidth;
             int tempH = uHeight;
+            //setters
             optionsDialog.TimeInterval = interval;
             optionsDialog.UniverseWidth = uWidth;
             optionsDialog.UniverseHeight = uHeight;
             if (DialogResult.OK == optionsDialog.ShowDialog())
             {
+                // getters
                 interval = optionsDialog.TimeInterval;
                 uWidth = optionsDialog.UniverseWidth;
                 uHeight = optionsDialog.UniverseHeight;
                 timer.Interval = interval;
+                toolStripStatusLabelInterval.Text = $"Interval: {interval}";
             }
+            // Is the universe different?
             if (tempW != uWidth || tempH != uHeight)
             {
+                // Then new
                 universe = new bool[uWidth, uHeight];
             }
+            // repaint
             graphicsPanel1.Invalidate();
         }
 
@@ -561,12 +646,15 @@ namespace Jennings_Tyler_GOL
         {
             Properties.Settings.Default.Reset();
             LoadSettings();
+            graphicsPanel1.Invalidate();
         }
 
         private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.Reload();
             LoadSettings();
+            graphicsPanel1.Invalidate();
+
         }
         #endregion
 
@@ -619,78 +707,6 @@ namespace Jennings_Tyler_GOL
         }
         #endregion
 
-
-        #region View Menu
-        private void hUDToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            hUDContextMenuItem.Checked = hUDToolStripMenuItem.Checked;
-            ConditionChecks();
-            graphicsPanel1.Invalidate();
-        }
-
-        private void HUDContextMenuItem_Click(object sender, EventArgs e)
-        {
-            hUDToolStripMenuItem.Checked = hUDContextMenuItem.Checked;
-            ConditionChecks();
-            graphicsPanel1.Invalidate();
-        }
-        private void neighborCountToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            neighborCountContextMenuItem.Checked = neighborCountToolStripMenuItem.Checked;
-
-            ConditionChecks();
-            graphicsPanel1.Invalidate();
-        }
-        private void neighborCountContextMenuItem_Click(object sender, EventArgs e)
-        {
-            neighborCountToolStripMenuItem.Checked = neighborCountContextMenuItem.Checked;
-            ConditionChecks();
-            graphicsPanel1.Invalidate();
-        }
-
-        private void gridToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            gridContextMenuItem.Checked = gridToolStripMenuItem.Checked;
-            ConditionChecks();
-            graphicsPanel1.Invalidate();
-        }
-        private void gridContextMenuItem_Click(object sender, EventArgs e)
-        {
-            gridToolStripMenuItem.Checked = gridContextMenuItem.Checked;
-            ConditionChecks();
-            graphicsPanel1.Invalidate();
-        }
-        private void finiteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (finiteToolStripMenuItem.Checked == false)
-            {
-                toroidalToolStripMenuItem.Checked = true;
-                isToroidal = true;
-            }
-            else
-            {
-                toroidalToolStripMenuItem.Checked = false;
-                isToroidal = false;
-
-            }
-        }
-
-        private void toroidalToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (toroidalToolStripMenuItem.Checked == false)
-            {
-                finiteToolStripMenuItem.Checked = true;
-                isToroidal = false;
-            }
-            else
-            {
-                finiteToolStripMenuItem.Checked = false;
-                isToroidal = true;
-
-            }
-        }
-        #endregion
-
         #region Closing
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -709,6 +725,10 @@ namespace Jennings_Tyler_GOL
             Properties.Settings.Default.cellColor = cellColor;
             Properties.Settings.Default.Seed = seed;
             Properties.Settings.Default.isToroidal = isToroidal;
+            Properties.Settings.Default.showNeighbors = showNeighbors;
+            Properties.Settings.Default.gridCheck = gridCheck;
+            Properties.Settings.Default.hudCheck = hudCheck;
+
             Properties.Settings.Default.Save();
         }
         #endregion

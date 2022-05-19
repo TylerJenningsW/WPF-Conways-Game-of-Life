@@ -130,5 +130,41 @@ namespace Jennings_Tyler_GOL.Properties {
                 this["isToroidal"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool showNeighbors {
+            get {
+                return ((bool)(this["showNeighbors"]));
+            }
+            set {
+                this["showNeighbors"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool gridCheck {
+            get {
+                return ((bool)(this["gridCheck"]));
+            }
+            set {
+                this["gridCheck"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool hudCheck {
+            get {
+                return ((bool)(this["hudCheck"]));
+            }
+            set {
+                this["hudCheck"] = value;
+            }
+        }
     }
 }
