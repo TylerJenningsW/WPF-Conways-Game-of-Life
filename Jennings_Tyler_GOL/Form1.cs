@@ -13,12 +13,14 @@ namespace Jennings_Tyler_GOL
     public partial class Form1 : Form
     {
         // The universe array
-        bool[,] universe = new bool[40, 40];
+        bool[,] universe;
         // universe dimensions
-        public int uWidth = 40;
-        public int uHeight = 40;
+        public int uWidth = Properties.Settings.Default.uWidth;
+        public int uHeight = Properties.Settings.Default.uHeight;
         // timer interval
         public int interval = 100;
+        // universe seed
+        int seed = 0;
         // Drawing colors
         Color gridColor = Color.Black;
         Color cellColor = Color.Gray;
@@ -32,38 +34,75 @@ namespace Jennings_Tyler_GOL
         int generations = 0;
 
         bool isToroidal;
-
+        bool showNeighbors;
+        bool gridCheck;
+        bool hudCheck;
 
         public Form1()
         {
             InitializeComponent();
             // Read the properties
-            graphicsPanel1.BackColor = Properties.Settings.Default.PanelColor;
-            gridColor = Properties.Settings.Default.gridColor;
-            cellColor = Properties.Settings.Default.cellColor;
+            LoadSettings();
+            ConditionChecks();
             // Setup the timer
             timer.Interval = interval; // milliseconds
             timer.Tick += Timer_Tick;
             timer.Enabled = false; // start timer running
         }
-
-        // Calculate the next generation of cells
-        private void NextGeneration()
+        private void ConditionChecks()
         {
             if (toroidalToolStripMenuItem.Checked == true)
             {
                 isToroidal = true;
             }
-
-            if (isToroidal)
+            else
             {
-
+                isToroidal = false;
             }
+            if (neighborCountToolStripMenuItem.Checked == true)
+            {
+                showNeighbors = true;
+            }
+            else
+            {
+                showNeighbors = false;
+            }
+            if (gridToolStripMenuItem.Checked == true)
+            {
+                gridCheck = true;
+            }
+            else
+            {
+                gridCheck = false;
+            }
+            if (hUDToolStripMenuItem.Checked == true)
+            {
+                hudCheck = true;
+            }
+            else
+            {
+                hudCheck = false;
+            }
+        }
+        private void LoadSettings()
+        {
+            universe = new bool[uWidth, uHeight];
+            uWidth = Properties.Settings.Default.uWidth;
+            uHeight = Properties.Settings.Default.uHeight;
+            graphicsPanel1.BackColor = Properties.Settings.Default.PanelColor;
+            gridColor = Properties.Settings.Default.gridColor;
+            cellColor = Properties.Settings.Default.cellColor;
+            seed = Properties.Settings.Default.Seed;
+        }
+        // Calculate the next generation of cells
+        private void NextGeneration()
+        {
             // Second universe array to copy from
             bool[,] scratchPad = new bool[uWidth, uHeight];
             // Iterate through the universe in the y, top to bottom
             for (int y = 0; y < universe.GetLength(1); y++)
             {
+                ConditionChecks();
                 // Iterate through the universe in the x, left to right
                 for (int x = 0; x < universe.GetLength(0); x++)
                 {
@@ -108,6 +147,7 @@ namespace Jennings_Tyler_GOL
                     }
                 }
             }
+
             // swap
             bool[,] temp = universe;
             universe = scratchPad;
@@ -146,6 +186,19 @@ namespace Jennings_Tyler_GOL
 
             // A Brush for filling dead cells interiors (color)
             Brush cellBrushDead = new SolidBrush(cellDead);
+            // font for displaying neighbor count
+            #region font
+            Font font = new Font(new FontFamily("Arial"), 20);
+
+            // text format for centering text
+            StringFormat drawFormat = new StringFormat();
+            // the centering
+            drawFormat.LineAlignment = StringAlignment.Center;
+            drawFormat.Alignment = StringAlignment.Center;
+            // the neighbors to count
+            #endregion
+
+            int cellCount = 0;
 
             // Iterate through the universe in the y, top to bottom
             for (int y = 0; y < universe.GetLength(1); y++)
@@ -161,66 +214,90 @@ namespace Jennings_Tyler_GOL
                     cellRect.Width = cellWidth;
                     cellRect.Height = cellHeight;
 
-                    // font for displaying neighbor count
-                    #region font
-                    Font font = new Font("Arial", 18);
-                    // text format for centering text
-                    StringFormat drawFormat = new StringFormat();
-                    // the centering
-                    drawFormat.LineAlignment = StringAlignment.Center;
-                    drawFormat.Alignment = StringAlignment.Center;
-                    // the neighbors to count
                     int neighbors = CountNeighborsFinite(x, y);
-                    #endregion
-
                     // Fill the cell with a brush if alive
                     // rectangle fill indicates alive aka true
                     // draw string indicates neighbor count and dead (red) or alive (green)
-                    if (universe[x, y] == true && neighbors == 0)
+                    if (universe[x, y] == true)
                     {
-                        // alive now and dead in the next gen, hide '0' string
+                        cellCount++;
+                    }
+                    if (showNeighbors == false && universe[x, y] == true)
+                    {
                         e.Graphics.FillRectangle(cellBrush, cellRect);
                     }
-                    else if (universe[x, y] == true && neighbors < 2)
+                    else if (showNeighbors == false)
                     {
-                        // alive now and dead in the next gen
-                        e.Graphics.FillRectangle(cellBrush, cellRect);
-                        e.Graphics.DrawString(neighbors.ToString(), font, cellBrushDead, cellRect, drawFormat);
+                        e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
+                        continue;
                     }
-                    else if (universe[x, y] == true && neighbors > 3)
+                    else
                     {
-                        // alive now and dead in the next gen
-                        e.Graphics.FillRectangle(cellBrush, cellRect);
-                        e.Graphics.DrawString(neighbors.ToString(), font, cellBrushDead, cellRect, drawFormat);
+                        if (universe[x, y] == true && neighbors == 0)
+                        {
+                            // alive now and dead in the next gen, hide '0' string
+                            e.Graphics.FillRectangle(cellBrush, cellRect);
+                        }
+                        else if ((universe[x, y] == true && neighbors < 2))
+                        {
+                            // alive now and dead in the next gen
+                            e.Graphics.FillRectangle(cellBrush, cellRect);
+                            e.Graphics.DrawString(neighbors.ToString(), font, cellBrushDead, cellRect, drawFormat);
+                        }
+                        else if ((universe[x, y] == true && neighbors > 3))
+                        {
+                            // alive now and dead in the next gen
+                            e.Graphics.FillRectangle(cellBrush, cellRect);
+                            e.Graphics.DrawString(neighbors.ToString(), font, cellBrushDead, cellRect, drawFormat);
+                        }
+                        else if (universe[x, y] == true && neighbors == 2)
+                        {
+                            // alive now and in the next gen
+                            e.Graphics.FillRectangle(cellBrush, cellRect);
+                            e.Graphics.DrawString(neighbors.ToString(), font, cellBrushAlive, cellRect, drawFormat);
+                        }
+                        else if (universe[x, y] == true && neighbors == 3)
+                        {
+                            // alive now and in the next gen
+                            e.Graphics.FillRectangle(cellBrush, cellRect);
+                            e.Graphics.DrawString(neighbors.ToString(), font, cellBrushAlive, cellRect, drawFormat);
+                        }
+                        else if (universe[x, y] == false && neighbors == 3)
+                        {
+                            // dead now and alive in the next gen
+                            e.Graphics.DrawString(neighbors.ToString(), font, cellBrushAlive, cellRect, drawFormat);
+                        }
+                        else if (universe[x, y] == false && neighbors > 0)
+                        {
+                            // dead now and in the next gen, avoid '0' spam
+                            e.Graphics.DrawString(neighbors.ToString(), font, cellBrushDead, cellRect, drawFormat);
+                        }
                     }
-                    else if (universe[x, y] == true && neighbors == 2)
-                    {
-                        // alive now and in the next gen
-                        e.Graphics.FillRectangle(cellBrush, cellRect);
-                        e.Graphics.DrawString(neighbors.ToString(), font, cellBrushAlive, cellRect, drawFormat);
-                    }
-                    else if (universe[x, y] == true && neighbors == 3)
-                    {
-                        // alive now and in the next gen
-                        e.Graphics.FillRectangle(cellBrush, cellRect);
-                        e.Graphics.DrawString(neighbors.ToString(), font, cellBrushAlive, cellRect, drawFormat);
-                    }
-                    else if (universe[x, y] == false && neighbors == 3)
-                    {
-                        // dead now and alive in the next gen
-                        e.Graphics.DrawString(neighbors.ToString(), font, cellBrushAlive, cellRect, drawFormat);
-                    }
-                    else if (universe[x, y] == false && neighbors > 0)
-                    {
-                        // dead now and in the next gen, avoid '0' spam
-                        e.Graphics.DrawString(neighbors.ToString(), font, cellBrushDead, cellRect, drawFormat);
-                    }
-
                     // Outline the cell with a pen
-                    e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
+                    if (gridCheck == true)
+                    {
+                        e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
+                    }
                 }
             }
-
+            string boundaryType;
+            if (isToroidal)
+            {
+                boundaryType = "Toroidal";
+            }
+            else
+            {
+                boundaryType = "Finite";
+            }
+            string HUD =
+                $"Generations: {generations}\n" +
+                $"Cell Count: {cellCount}\n" +
+                $"Boundary Type: {boundaryType}\n" +
+                $"Universe Size: Width={uWidth}, Height={uHeight}";
+            if (hudCheck == true)
+            {
+                e.Graphics.DrawString(HUD, font, Brushes.Aqua, 0, 0);
+            }
             // Cleaning up pens and brushes
             gridPen.Dispose();
             cellBrush.Dispose();
@@ -256,13 +333,22 @@ namespace Jennings_Tyler_GOL
 
         private void Randomize()
         {
+            Random rand = new Random(seed);
             // Iterate through the universe in the y, top to bottom
             for (int y = 0; y < universe.GetLength(1); y++)
             {
                 // Iterate through the universe in the x, left to right
                 for (int x = 0; x < universe.GetLength(0); x++)
                 {
-
+                    int rng = rand.Next(-1, 2);
+                    if (rng == -1)
+                    {
+                        universe[x, y] = true;
+                    }
+                    else
+                    {
+                        universe[x, y] = false;
+                    }
                 }
             }
         }
@@ -449,12 +535,69 @@ namespace Jennings_Tyler_GOL
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             // Update the properties
+            Properties.Settings.Default.uWidth = uWidth;
+            Properties.Settings.Default.uHeight = uHeight;
             Properties.Settings.Default.PanelColor = graphicsPanel1.BackColor;
             Properties.Settings.Default.gridColor = gridColor;
             Properties.Settings.Default.cellColor = cellColor;
-
-
+            Properties.Settings.Default.Seed = seed;
             Properties.Settings.Default.Save();
+        }
+
+        private void resetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reset();
+            LoadSettings();
+        }
+
+        private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reload();
+            LoadSettings();
+        }
+
+        private void fromSeedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SeedDialog seedDialog = new SeedDialog();
+            seedDialog.Seed = seed;
+            if (DialogResult.OK == seedDialog.ShowDialog())
+            {
+                seed = seedDialog.Seed;
+                Randomize();
+            }
+            graphicsPanel1.Invalidate();
+        }
+
+        private void neighborCountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConditionChecks();
+
+            graphicsPanel1.Invalidate();
+        }
+
+        private void fromCurrentSeedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Randomize();
+            graphicsPanel1.Invalidate();
+        }
+
+        private void fromTimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            seed = DateTime.Now.Day;
+            Randomize();
+            graphicsPanel1.Invalidate();
+        }
+
+        private void gridToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConditionChecks();
+            graphicsPanel1.Invalidate();
+        }
+
+        private void hUDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ConditionChecks();
+            graphicsPanel1.Invalidate();
         }
     }
 }

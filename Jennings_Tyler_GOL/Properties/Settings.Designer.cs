@@ -82,5 +82,17 @@ namespace Jennings_Tyler_GOL.Properties {
                 this["cellColor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("123")]
+        public int Seed {
+            get {
+                return ((int)(this["Seed"]));
+            }
+            set {
+                this["Seed"] = value;
+            }
+        }
     }
 }

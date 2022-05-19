@@ -17,5 +17,8 @@
     <Setting Name="cellColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Gray</Value>
     </Setting>
+    <Setting Name="Seed" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
