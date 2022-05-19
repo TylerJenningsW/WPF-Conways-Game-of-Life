@@ -97,6 +97,7 @@ namespace Jennings_Tyler_GOL
             this.gridx10ColorToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripStatusLabelInterval = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelAlive = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelSeed = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -495,7 +496,8 @@ namespace Jennings_Tyler_GOL
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelGenerations,
             this.toolStripStatusLabelInterval,
-            this.toolStripStatusLabelAlive});
+            this.toolStripStatusLabelAlive,
+            this.toolStripStatusLabelSeed});
             this.statusStrip1.Location = new System.Drawing.Point(0, 604);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(715, 22);
@@ -561,21 +563,22 @@ namespace Jennings_Tyler_GOL
             // fromSeedToolStripMenuItem
             // 
             this.fromSeedToolStripMenuItem.Name = "fromSeedToolStripMenuItem";
-            this.fromSeedToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.fromSeedToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.fromSeedToolStripMenuItem.Text = "From Seed";
             this.fromSeedToolStripMenuItem.Click += new System.EventHandler(this.fromSeedToolStripMenuItem_Click);
             // 
             // fromCurrentSeedToolStripMenuItem
             // 
             this.fromCurrentSeedToolStripMenuItem.Name = "fromCurrentSeedToolStripMenuItem";
-            this.fromCurrentSeedToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.fromCurrentSeedToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F6;
+            this.fromCurrentSeedToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.fromCurrentSeedToolStripMenuItem.Text = "From Current Seed";
             this.fromCurrentSeedToolStripMenuItem.Click += new System.EventHandler(this.fromCurrentSeedToolStripMenuItem_Click);
             // 
             // fromTimeToolStripMenuItem
             // 
             this.fromTimeToolStripMenuItem.Name = "fromTimeToolStripMenuItem";
-            this.fromTimeToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.fromTimeToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.fromTimeToolStripMenuItem.Text = "From Time";
             this.fromTimeToolStripMenuItem.Click += new System.EventHandler(this.fromTimeToolStripMenuItem_Click);
             // 
@@ -653,8 +656,14 @@ namespace Jennings_Tyler_GOL
             // toolStripStatusLabelAlive
             // 
             this.toolStripStatusLabelAlive.Name = "toolStripStatusLabelAlive";
-            this.toolStripStatusLabelAlive.Size = new System.Drawing.Size(53, 17);
-            this.toolStripStatusLabelAlive.Text = "Alive = 0";
+            this.toolStripStatusLabelAlive.Size = new System.Drawing.Size(45, 17);
+            this.toolStripStatusLabelAlive.Text = "Alive: 0";
+            // 
+            // toolStripStatusLabelSeed
+            // 
+            this.toolStripStatusLabelSeed.Name = "toolStripStatusLabelSeed";
+            this.toolStripStatusLabelSeed.Size = new System.Drawing.Size(35, 17);
+            this.toolStripStatusLabelSeed.Text = "Seed:";
             // 
             // Form1
             // 
@@ -669,6 +678,7 @@ namespace Jennings_Tyler_GOL
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Game of Life";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -750,6 +760,7 @@ namespace Jennings_Tyler_GOL
         private System.Windows.Forms.ToolStripMenuItem gridx10ColorToolStripMenuItem1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelInterval;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelAlive;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelSeed;
     }
 }
 

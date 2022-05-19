@@ -92,6 +92,7 @@ namespace Jennings_Tyler_GOL
         {
             toolStripStatusLabelInterval.Text = $"Interval = {interval}";
             toolStripStatusLabelAlive.Text = $"Alive: {cellCount}";
+            toolStripStatusLabelSeed.Text = $"Seed: {seed}";
             universe = new bool[uWidth, uHeight];
             uWidth = Properties.Settings.Default.uWidth;
             uHeight = Properties.Settings.Default.uHeight;
@@ -690,6 +691,7 @@ namespace Jennings_Tyler_GOL
                 seed = seedDialog.Seed;
                 Randomize();
             }
+            toolStripStatusLabelSeed.Text = $"Seed: {seed}";
             graphicsPanel1.Invalidate();
         }
 
@@ -703,6 +705,7 @@ namespace Jennings_Tyler_GOL
         {
             seed = DateTime.Now.Day;
             Randomize();
+            toolStripStatusLabelSeed.Text = $"Seed: {seed}";
             graphicsPanel1.Invalidate();
         }
         #endregion
