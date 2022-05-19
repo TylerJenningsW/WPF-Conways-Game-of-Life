@@ -20,5 +20,11 @@
     <Setting Name="Seed" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">123</Value>
     </Setting>
+    <Setting Name="gridColorx10" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Black</Value>
+    </Setting>
+    <Setting Name="interval" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

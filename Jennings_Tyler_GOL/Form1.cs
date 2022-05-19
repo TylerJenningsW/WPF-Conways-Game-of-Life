@@ -18,11 +18,12 @@ namespace Jennings_Tyler_GOL
         public int uWidth = Properties.Settings.Default.uWidth;
         public int uHeight = Properties.Settings.Default.uHeight;
         // timer interval
-        public int interval = 100;
+        public int interval = Properties.Settings.Default.interval;
         // universe seed
         int seed = 0;
         // Drawing colors
         Color gridColor = Color.Black;
+        Color gridColorx10 = Color.Black;
         Color cellColor = Color.Gray;
         Color cellAlive = Color.Green;
         Color cellDead = Color.Red;
@@ -59,14 +60,30 @@ namespace Jennings_Tyler_GOL
             {
                 isToroidal = false;
             }
+            #region show neighbors
             if (neighborCountToolStripMenuItem.Checked == true)
             {
                 showNeighbors = true;
+                neighborCountContextMenuItem.Checked = true;
             }
             else
             {
+                neighborCountContextMenuItem.Checked = true;
                 showNeighbors = false;
             }
+            if (neighborCountContextMenuItem.Checked == true)
+            {
+                neighborCountToolStripMenuItem.Checked = true;
+            }
+            else
+            {
+                neighborCountToolStripMenuItem.Checked = false;
+                showNeighbors = false;
+
+            }
+            #endregion
+
+            #region grid
             if (gridToolStripMenuItem.Checked == true)
             {
                 gridCheck = true;
@@ -75,6 +92,7 @@ namespace Jennings_Tyler_GOL
             {
                 gridCheck = false;
             }
+            #endregion
             if (hUDToolStripMenuItem.Checked == true)
             {
                 hudCheck = true;
@@ -89,8 +107,10 @@ namespace Jennings_Tyler_GOL
             universe = new bool[uWidth, uHeight];
             uWidth = Properties.Settings.Default.uWidth;
             uHeight = Properties.Settings.Default.uHeight;
+            interval = Properties.Settings.Default.interval;
             graphicsPanel1.BackColor = Properties.Settings.Default.PanelColor;
             gridColor = Properties.Settings.Default.gridColor;
+            gridColorx10 = Properties.Settings.Default.gridColorx10;
             cellColor = Properties.Settings.Default.cellColor;
             seed = Properties.Settings.Default.Seed;
         }
@@ -179,6 +199,7 @@ namespace Jennings_Tyler_GOL
 
             // A Pen for drawing the grid lines (color, width)
             Pen gridPen = new Pen(gridColor, 1);
+            Pen gridPenx10 = new Pen(gridColorx10, 4);
 
             // A Brush for filling living cells interiors (color)
             Brush cellBrush = new SolidBrush(cellColor);
@@ -278,6 +299,16 @@ namespace Jennings_Tyler_GOL
                     {
                         e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
                     }
+
+                    if (y % 10 == 0)
+                    {
+                        e.Graphics.DrawLine(gridPenx10, 0, cellRect.Y, graphicsPanel1.Width, cellRect.Y);
+                    }
+                    if (x % 10 == 0)
+                    {
+                        e.Graphics.DrawLine(gridPenx10, cellRect.X, 0, cellRect.X, graphicsPanel1.Height);
+
+                    }
                 }
             }
             string boundaryType;
@@ -300,6 +331,7 @@ namespace Jennings_Tyler_GOL
             }
             // Cleaning up pens and brushes
             gridPen.Dispose();
+            gridPenx10.Dispose();
             cellBrush.Dispose();
             cellBrushDead.Dispose();
             cellBrushAlive.Dispose();
@@ -331,27 +363,6 @@ namespace Jennings_Tyler_GOL
             }
         }
 
-        private void Randomize()
-        {
-            Random rand = new Random(seed);
-            // Iterate through the universe in the y, top to bottom
-            for (int y = 0; y < universe.GetLength(1); y++)
-            {
-                // Iterate through the universe in the x, left to right
-                for (int x = 0; x < universe.GetLength(0); x++)
-                {
-                    int rng = rand.Next(-1, 2);
-                    if (rng == -1)
-                    {
-                        universe[x, y] = true;
-                    }
-                    else
-                    {
-                        universe[x, y] = false;
-                    }
-                }
-            }
-        }
         private int CountNeighborsFinite(int x, int y)
         {
             int count = 0;
@@ -441,12 +452,6 @@ namespace Jennings_Tyler_GOL
             this.Close();
         }
 
-        private void Run_Click(object sender, EventArgs e)
-        {
-            // begin the game
-            timer.Enabled = true;
-        }
-
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Iterate through the universe in the y, top to bottom
@@ -461,6 +466,12 @@ namespace Jennings_Tyler_GOL
             }
             // repaint
             graphicsPanel1.Invalidate();
+        }
+
+        private void Run_Click(object sender, EventArgs e)
+        {
+            // begin the game
+            timer.Enabled = true;
         }
 
         private void Stop_Click(object sender, EventArgs e)
@@ -532,13 +543,118 @@ namespace Jennings_Tyler_GOL
             }
         }
 
+        private void gridx10ColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            ColorDialog colorDialog = new ColorDialog();
+            colorDialog.Color = gridColorx10;
+            if (DialogResult.OK == colorDialog.ShowDialog())
+            {
+                gridColorx10 = colorDialog.Color;
+                graphicsPanel1.Invalidate();
+            }
+        }
+        #region random menu methods
+        private void Randomize()
+        {
+            Random rand = new Random(seed);
+            // Iterate through the universe in the y, top to bottom
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                // Iterate through the universe in the x, left to right
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    int rng = rand.Next(-1, 2);
+                    if (rng == -1)
+                    {
+                        universe[x, y] = true;
+                    }
+                    else
+                    {
+                        universe[x, y] = false;
+                    }
+                }
+            }
+        }
+
+        private void fromSeedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SeedDialog seedDialog = new SeedDialog();
+            seedDialog.Seed = seed;
+            if (DialogResult.OK == seedDialog.ShowDialog())
+            {
+                seed = seedDialog.Seed;
+                Randomize();
+            }
+            graphicsPanel1.Invalidate();
+        }
+
+        private void fromCurrentSeedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Randomize();
+            graphicsPanel1.Invalidate();
+        }
+
+        private void fromTimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            seed = DateTime.Now.Day;
+            Randomize();
+            graphicsPanel1.Invalidate();
+        }
+        #endregion
+
+
+        #region View menu methods
+        private void hUDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            hUDContextMenuItem.Checked = hUDToolStripMenuItem.Checked;
+            ConditionChecks();
+            graphicsPanel1.Invalidate();
+        }
+
+        private void HUDContextMenuItem_Click(object sender, EventArgs e)
+        {
+            hUDToolStripMenuItem.Checked = hUDContextMenuItem.Checked;
+            ConditionChecks();
+            graphicsPanel1.Invalidate();
+        }
+        private void neighborCountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            neighborCountContextMenuItem.Checked = neighborCountToolStripMenuItem.Checked;
+
+            ConditionChecks();
+            graphicsPanel1.Invalidate();
+        }
+        private void neighborCountContextMenuItem_Click(object sender, EventArgs e)
+        {
+            neighborCountToolStripMenuItem.Checked = neighborCountContextMenuItem.Checked;
+            ConditionChecks();
+            graphicsPanel1.Invalidate();
+        }
+
+        private void gridToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            gridContextMenuItem.Checked = gridToolStripMenuItem.Checked;
+            ConditionChecks();
+            graphicsPanel1.Invalidate();
+        }
+        private void gridContextMenuItem_Click(object sender, EventArgs e)
+        {
+            gridToolStripMenuItem.Checked = gridContextMenuItem.Checked;
+            ConditionChecks();
+            graphicsPanel1.Invalidate();
+        }
+        #endregion
+
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             // Update the properties
             Properties.Settings.Default.uWidth = uWidth;
             Properties.Settings.Default.uHeight = uHeight;
+            Properties.Settings.Default.interval = interval;
             Properties.Settings.Default.PanelColor = graphicsPanel1.BackColor;
             Properties.Settings.Default.gridColor = gridColor;
+            Properties.Settings.Default.gridColorx10 = gridColorx10;
             Properties.Settings.Default.cellColor = cellColor;
             Properties.Settings.Default.Seed = seed;
             Properties.Settings.Default.Save();
@@ -556,48 +672,5 @@ namespace Jennings_Tyler_GOL
             LoadSettings();
         }
 
-        private void fromSeedToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SeedDialog seedDialog = new SeedDialog();
-            seedDialog.Seed = seed;
-            if (DialogResult.OK == seedDialog.ShowDialog())
-            {
-                seed = seedDialog.Seed;
-                Randomize();
-            }
-            graphicsPanel1.Invalidate();
-        }
-
-        private void neighborCountToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ConditionChecks();
-
-            graphicsPanel1.Invalidate();
-        }
-
-        private void fromCurrentSeedToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Randomize();
-            graphicsPanel1.Invalidate();
-        }
-
-        private void fromTimeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            seed = DateTime.Now.Day;
-            Randomize();
-            graphicsPanel1.Invalidate();
-        }
-
-        private void gridToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ConditionChecks();
-            graphicsPanel1.Invalidate();
-        }
-
-        private void hUDToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ConditionChecks();
-            graphicsPanel1.Invalidate();
-        }
     }
 }

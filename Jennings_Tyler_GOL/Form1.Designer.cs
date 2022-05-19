@@ -89,6 +89,11 @@ namespace Jennings_Tyler_GOL
             this.fromCurrentSeedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fromTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.graphicsPanel1 = new Jennings_Tyler_GOL.GraphicsPanel();
+            this.viewToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.hUDContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.neighborCountContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gridContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gridx10ColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -285,6 +290,7 @@ namespace Jennings_Tyler_GOL
             this.backToolStripMenuItem,
             this.cellColorToolStripMenuItem,
             this.gridColorToolStripMenuItem,
+            this.gridx10ColorToolStripMenuItem,
             this.toolStripSeparator3,
             this.optionsToolStripMenuItem1,
             this.toolStripSeparator4,
@@ -497,9 +503,10 @@ namespace Jennings_Tyler_GOL
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.colorToolStripMenuItem});
+            this.colorToolStripMenuItem,
+            this.viewToolStripMenuItem1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(104, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(104, 48);
             // 
             // colorToolStripMenuItem
             // 
@@ -508,7 +515,7 @@ namespace Jennings_Tyler_GOL
             this.cellColorToolStripMenuItem1,
             this.gridColorToolStripMenuItem1});
             this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
-            this.colorToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.colorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.colorToolStripMenuItem.Text = "Color";
             // 
             // backColorToolStripMenuItem
@@ -574,6 +581,53 @@ namespace Jennings_Tyler_GOL
             this.graphicsPanel1.TabIndex = 3;
             this.graphicsPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.graphicsPanel1_Paint);
             this.graphicsPanel1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.graphicsPanel1_MouseClick);
+            // 
+            // viewToolStripMenuItem1
+            // 
+            this.viewToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.hUDContextMenuItem,
+            this.neighborCountContextMenuItem,
+            this.gridContextMenuItem});
+            this.viewToolStripMenuItem1.Name = "viewToolStripMenuItem1";
+            this.viewToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.viewToolStripMenuItem1.Text = "View";
+            // 
+            // hUDContextMenuItem
+            // 
+            this.hUDContextMenuItem.Checked = true;
+            this.hUDContextMenuItem.CheckOnClick = true;
+            this.hUDContextMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.hUDContextMenuItem.Name = "hUDContextMenuItem";
+            this.hUDContextMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.hUDContextMenuItem.Text = "HUD";
+            this.hUDContextMenuItem.Click += new System.EventHandler(this.HUDContextMenuItem_Click);
+            // 
+            // neighborCountContextMenuItem
+            // 
+            this.neighborCountContextMenuItem.Checked = true;
+            this.neighborCountContextMenuItem.CheckOnClick = true;
+            this.neighborCountContextMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.neighborCountContextMenuItem.Name = "neighborCountContextMenuItem";
+            this.neighborCountContextMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.neighborCountContextMenuItem.Text = "NeighborCount";
+            this.neighborCountContextMenuItem.Click += new System.EventHandler(this.neighborCountContextMenuItem_Click);
+            // 
+            // gridContextMenuItem
+            // 
+            this.gridContextMenuItem.Checked = true;
+            this.gridContextMenuItem.CheckOnClick = true;
+            this.gridContextMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.gridContextMenuItem.Name = "gridContextMenuItem";
+            this.gridContextMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gridContextMenuItem.Text = "Grid";
+            this.gridContextMenuItem.Click += new System.EventHandler(this.gridContextMenuItem_Click);
+            // 
+            // gridx10ColorToolStripMenuItem
+            // 
+            this.gridx10ColorToolStripMenuItem.Name = "gridx10ColorToolStripMenuItem";
+            this.gridx10ColorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.gridx10ColorToolStripMenuItem.Text = "Gridx10 Color";
+            this.gridx10ColorToolStripMenuItem.Click += new System.EventHandler(this.gridx10ColorToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -660,6 +714,11 @@ namespace Jennings_Tyler_GOL
         private System.Windows.Forms.ToolStripMenuItem fromSeedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fromCurrentSeedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fromTimeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem hUDContextMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem neighborCountContextMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gridContextMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gridx10ColorToolStripMenuItem;
     }
 }
 
