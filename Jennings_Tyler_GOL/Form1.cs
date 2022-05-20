@@ -21,7 +21,7 @@ namespace Jennings_Tyler_GOL
         // timer interval
         public int interval = Properties.Settings.Default.interval;
         // universe seed
-        int seed = 0;
+        int seed = Properties.Settings.Default.Seed;
         // Drawing colors
         Color gridColor = Color.Black;
         Color gridColorx10 = Color.Black;
@@ -94,9 +94,6 @@ namespace Jennings_Tyler_GOL
         private void LoadSettings()
         {
             // All of the settings to initialize at the start
-            toolStripStatusLabelInterval.Text = $"Interval = {interval}"; // timer speed
-            toolStripStatusLabelAlive.Text = $"Alive: {cellCount}"; // live cells
-            toolStripStatusLabelSeed.Text = $"Seed: {seed}"; // seed to generate from
             universe = new bool[uWidth, uHeight]; // the universe array
             uWidth = Properties.Settings.Default.uWidth; // universe width
             uHeight = Properties.Settings.Default.uHeight; // universe height
@@ -110,6 +107,9 @@ namespace Jennings_Tyler_GOL
             showNeighbors = Properties.Settings.Default.showNeighbors; // display neighbors
             gridCheck = Properties.Settings.Default.gridCheck; // display grid
             hudCheck = Properties.Settings.Default.hudCheck; // display hud
+            toolStripStatusLabelInterval.Text = $"Interval = {interval}"; // timer speed
+            toolStripStatusLabelAlive.Text = $"Alive: {cellCount}"; // live cells
+            toolStripStatusLabelSeed.Text = $"Seed: {seed}"; // seed to generate from
         }
         #endregion
 
@@ -366,7 +366,7 @@ namespace Jennings_Tyler_GOL
                 // Prefix all comment strings with an exclamation point.
                 // Use WriteLine to write the strings to the file. 
                 // It appends a CRLF for you.
-                writer.WriteLine($"!{DateTime.Now.Day}");
+                writer.WriteLine($"!{DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Local)}");
 
                 // Iterate through the universe one row at a time.
                 for (int y = 0; y < universe.GetLength(1); y++)
