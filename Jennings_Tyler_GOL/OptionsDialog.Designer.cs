@@ -106,6 +106,11 @@ namespace Jennings_Tyler_GOL
             // intervalUpDown
             // 
             this.intervalUpDown.Location = new System.Drawing.Point(182, 40);
+            this.intervalUpDown.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             this.intervalUpDown.Name = "intervalUpDown";
             this.intervalUpDown.Size = new System.Drawing.Size(120, 20);
             this.intervalUpDown.TabIndex = 6;

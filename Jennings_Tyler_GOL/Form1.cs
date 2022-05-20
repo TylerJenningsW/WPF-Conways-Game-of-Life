@@ -891,6 +891,7 @@ namespace Jennings_Tyler_GOL
         }
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
             // Construct the options form
             OptionsDialog optionsDialog = new OptionsDialog();
             // We only want a new universe if we actually updated it
@@ -915,8 +916,32 @@ namespace Jennings_Tyler_GOL
             // Is the universe different?
             if (tempW != uWidth || tempH != uHeight)
             {
+                // Get a copy
+                bool[,] temp = universe;
+                for (int y = 0; y < temp.GetLength(1); y++)
+                {
+                    // Iterate through the universe in the x, left to right
+                    for (int x = 0; x < temp.GetLength(0); x++)
+                    {
+                        // And refill the array
+                        temp[x, y] = universe[x, y];
+                    }
+                }
                 // Then new
                 universe = new bool[uWidth, uHeight];
+                for (int y = 0; y < universe.GetLength(1); y++)
+                {
+                    // Iterate through the universe in the x, left to right
+                    for (int x = 0; x < universe.GetLength(0); x++)
+                    {
+                        // Makesure it's in range
+                        if (temp.GetLength(1) >= y && temp.GetLength(0) >= x)
+                        {
+                            // And refill the array
+                            universe[x, y] = temp[x, y];
+                        }
+                    }
+                }
             }
             // repaint
             graphicsPanel1.Invalidate();

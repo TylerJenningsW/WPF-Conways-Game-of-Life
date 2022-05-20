@@ -21,10 +21,12 @@ namespace Jennings_Tyler_GOL
         {
             get
             {
+                // get the value from the numeric up/down universe width window
                 return (int)universeWidthUpDown.Value;
             }
             set
             {
+                // set the value from the numeric up/down universe width window equal to a value
                 universeWidthUpDown.Value = value;
             }
         }
@@ -32,10 +34,12 @@ namespace Jennings_Tyler_GOL
         {
             get
             {
+                // get the value from the numeric up/down universe height window
                 return (int)universeHeightUpDown.Value;
             }
             set
             {
+                // set the value from the numeric up/down universe height window equal to a value
                 universeHeightUpDown.Value = value;
             }
         }
@@ -43,10 +47,12 @@ namespace Jennings_Tyler_GOL
         {
             get
             {
+                // get the value from the numeric up/down timer interval window
                 return (int)intervalUpDown.Value;
             }
             set
             {
+                // set the value from the numeric up/down timer interval window equal to a value
                 intervalUpDown.Value = value;
             }
         }
