@@ -820,7 +820,7 @@ namespace Jennings_Tyler_GOL
         private void fromTimeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // set the seen equal to the time
-            seed = DateTime.Now.Day;
+            seed = (int)DateTime.Now.Ticks;
             // pass in the new seed
             Randomize();
             // Display the new seed
