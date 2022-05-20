@@ -16,6 +16,7 @@ namespace Jennings_Tyler_GOL
         {
             InitializeComponent();
         }
+        #region Properties
         public int UniverseWidth
         {
             get
@@ -49,5 +50,6 @@ namespace Jennings_Tyler_GOL
                 intervalUpDown.Value = value;
             }
         }
+        #endregion
     }
 }

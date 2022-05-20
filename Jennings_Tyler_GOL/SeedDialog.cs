@@ -16,6 +16,7 @@ namespace Jennings_Tyler_GOL
         {
             InitializeComponent();
         }
+        #region Properties
         public int Seed
         {
             get
@@ -27,8 +28,10 @@ namespace Jennings_Tyler_GOL
                 seedUpDown.Value = value;
             }
         }
+        #endregion
         private void randomizeButton_Click(object sender, EventArgs e)
         {
+            // random seed
             Random rng = new Random();
             Seed = rng.Next();
         }

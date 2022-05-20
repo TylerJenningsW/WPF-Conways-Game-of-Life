@@ -13,6 +13,7 @@ namespace Jennings_Tyler_GOL
 {
     public partial class Form1 : Form
     {
+        #region Data members
         // The universe array
         bool[,] universe;
         // universe dimensions
@@ -43,7 +44,9 @@ namespace Jennings_Tyler_GOL
         bool showNeighbors = Properties.Settings.Default.showNeighbors;
         bool gridCheck = Properties.Settings.Default.gridCheck;
         bool hudCheck = Properties.Settings.Default.hudCheck;
+        #endregion
 
+        #region Form constructor
         public Form1()
         {
             InitializeComponent();
@@ -56,6 +59,8 @@ namespace Jennings_Tyler_GOL
             timer.Tick += Timer_Tick;
             timer.Enabled = false; // start timer
         }
+        #endregion
+
         #region Game Startup
         private void ConditionChecks()
         {
