@@ -526,6 +526,7 @@ namespace Jennings_Tyler_GOL
             // fromTimeToolStripMenuItem
             // 
             this.fromTimeToolStripMenuItem.Name = "fromTimeToolStripMenuItem";
+            this.fromTimeToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F4;
             this.fromTimeToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.fromTimeToolStripMenuItem.Text = "From Time";
             this.fromTimeToolStripMenuItem.Click += new System.EventHandler(this.fromTimeToolStripMenuItem_Click);
