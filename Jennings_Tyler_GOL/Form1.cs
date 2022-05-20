@@ -935,7 +935,7 @@ namespace Jennings_Tyler_GOL
                     for (int x = 0; x < universe.GetLength(0); x++)
                     {
                         // Makesure it's in range
-                        if (temp.GetLength(1) >= y && temp.GetLength(0) >= x)
+                        if (temp.GetLength(1) > y && temp.GetLength(0) > x)
                         {
                             // And refill the array
                             universe[x, y] = temp[x, y];
