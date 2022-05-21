@@ -279,6 +279,7 @@ namespace Jennings_Tyler_GOL
             }
             // The type of boundary system we're currently using
             string boundaryType;
+
             if (isToroidal)
             {
                 boundaryType = "Toroidal";
@@ -298,6 +299,7 @@ namespace Jennings_Tyler_GOL
             {
                 e.Graphics.DrawString(HUD, font, Brushes.Aqua, 0, 0);
             }
+            
             // Cleaning up pens and brushes
             gridPen.Dispose();
             gridPenx10.Dispose();
@@ -567,6 +569,8 @@ namespace Jennings_Tyler_GOL
                 isToroidal = false;
 
             }
+            // repaint for hud
+            graphicsPanel1.Invalidate();
         }
 
         private void toroidalToolStripMenuItem_Click(object sender, EventArgs e)
@@ -583,6 +587,8 @@ namespace Jennings_Tyler_GOL
                 isToroidal = true;
 
             }
+            // repaint for hud
+            graphicsPanel1.Invalidate();
         }
 
         private int CountNeighborsFinite(int x, int y)
