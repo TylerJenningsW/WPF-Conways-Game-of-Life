@@ -795,6 +795,10 @@ namespace Jennings_Tyler_GOL
             // Construct Seed dialog object from custom form
             SeedDialog seedDialog = new SeedDialog();
             // Set / mutate
+            if (seed < 0)
+            {
+                seed *= -1;
+            }
             seedDialog.Seed = seed;
             if (DialogResult.OK == seedDialog.ShowDialog())
             {
@@ -820,7 +824,11 @@ namespace Jennings_Tyler_GOL
         private void fromTimeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // set the seen equal to the time
-            seed = (int)DateTime.Now.Ticks;
+            seed = (int)DateTime.Now.Ticks % int.MaxValue;
+            if (seed < 0)
+            {
+                seed *= -1;
+            }
             // pass in the new seed
             Randomize();
             // Display the new seed

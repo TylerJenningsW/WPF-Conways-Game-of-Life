@@ -25,7 +25,7 @@ namespace Jennings_Tyler_GOL
             }
             set
             {
-                seedUpDown.Value = value;
+                seedUpDown.Value = (int)value;
             }
         }
         #endregion
