@@ -99,7 +99,7 @@ namespace Jennings_Tyler_GOL
         private void LoadSettings()
         {
             // All of the settings to initialize at the start
-            universe = new bool[uWidth, uHeight]; // the universe array
+            
             uWidth = Properties.Settings.Default.uWidth; // universe width
             uHeight = Properties.Settings.Default.uHeight; // universe height
             interval = Properties.Settings.Default.interval; // timer speed
@@ -112,6 +112,7 @@ namespace Jennings_Tyler_GOL
             showNeighbors = Properties.Settings.Default.showNeighbors; // display neighbors
             gridCheck = Properties.Settings.Default.gridCheck; // display grid
             hudCheck = Properties.Settings.Default.hudCheck; // display hud
+            universe = new bool[uWidth, uHeight]; // the universe array
             toolStripStatusLabelInterval.Text = $"Interval = {interval}"; // timer speed
             toolStripStatusLabelAlive.Text = $"Alive: {cellCount}"; // live cells
             toolStripStatusLabelSeed.Text = $"Seed: {seed}"; // seed to generate from
