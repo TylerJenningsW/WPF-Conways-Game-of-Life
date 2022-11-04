@@ -4,6 +4,11 @@
 
 >*NOTE:* This project is meant to be a learning experience, as the author had limited knowledge of C# and Windows Presentation Foundation going into the project.
 
+## Installation
+```
+git clone https://github.com/TylerJenningsW/WPF-Conways-Game-of-Life/
+```
+
 ## Examples
 
 ![GOL_example](https://user-images.githubusercontent.com/95639661/199861174-a0400ce0-aec8-4306-a80d-e93664ce8267.gif)
