@@ -298,7 +298,7 @@ namespace Jennings_Tyler_GOL
             // Display the hud if checked
             if (hudCheck == true)
             {
-                e.Graphics.DrawString(HUD, font, Brushes.Aqua, 0, 0);
+                e.Graphics.DrawString(HUD, font, Brushes.DarkGreen, 0, 0);
             }
             
             // Cleaning up pens and brushes
