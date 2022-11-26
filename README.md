@@ -2,7 +2,7 @@
 
 >[ Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) is written in C# by [@TylerJenningsW](https://github.com/TylerJenningsW) using Windows Forms.
 
->*NOTE:* This project is meant to be a learning experience, as the author had limited knowledge of C# and Windows Presentation Foundation going into the project.
+>*NOTE:* This project is meant to be a learning experience, as the author had limited knowledge of C# and Windows Forms going into the project.
 
 ## Installation
 ```
