@@ -10,6 +10,8 @@ git clone https://github.com/TylerJenningsW/Winforms-Conways-Game-of-Life/
 ```
 
 ## Examples
-
-![GOL_example](https://user-images.githubusercontent.com/95639661/199861174-a0400ce0-aec8-4306-a80d-e93664ce8267.gif)
+### Random seed
 ![GOL_example2](https://user-images.githubusercontent.com/95639661/199861712-02df8685-7ca0-477e-b71c-01971ebd6b05.gif)
+### Glider
+![GOL_example](https://user-images.githubusercontent.com/95639661/199861174-a0400ce0-aec8-4306-a80d-e93664ce8267.gif)
+
